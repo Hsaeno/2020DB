@@ -39,7 +39,7 @@ drop table if exists users;
 /*==============================================================*/
 create table address
 (
-   address_id           int not null,
+   address_id           int not null auto_increment,
    order_id             int,
    user_id              int,
    province             varchar(50) not null,
@@ -55,7 +55,7 @@ create table address
 /*==============================================================*/
 create table admin
 (
-   admin_id             int not null,
+   admin_id             int not null auto_increment,
    admin_name           varchar(50) not null,
    admin_login_pwd      varchar(50) not null,
    primary key (admin_id)
@@ -66,7 +66,7 @@ create table admin
 /*==============================================================*/
 create table coupon
 (
-   coupon_id            int not null,
+   coupon_id            int not null auto_increment,
    order_id             int,
    coupon_content       varchar(50) not null,
    least_monet          double not null,
@@ -93,7 +93,7 @@ create table dis_conn_goods
 /*==============================================================*/
 create table discount_inf
 (
-   dis_inf_id           int not null,
+   dis_inf_id           int not null auto_increment,
    dis_inf_content      varchar(50) not null,
    leastgoods_number    int not null,
    discount             double not null,
@@ -107,7 +107,7 @@ create table discount_inf
 /*==============================================================*/
 create table fresh
 (
-   catagory_id          int not null,
+   catagory_id          int not null auto_increment,
    catagory_name        varchar(50) not null,
    description          varchar(50) not null,
    primary key (catagory_id)
@@ -118,7 +118,7 @@ create table fresh
 /*==============================================================*/
 create table goods
 (
-   goods_id             int not null,
+   goods_id             int not null auto_increment,
    purchase_id          int,
    catagory_id          int,
    promotion_id         int,
@@ -150,7 +150,7 @@ create table goods_comment
 /*==============================================================*/
 create table menu
 (
-   menu_id              int not null,
+   menu_id              int not null auto_increment,
    menu_name            varchar(50) not null,
    material             varchar(50) not null,
    step                 varchar(50) not null,
@@ -188,7 +188,7 @@ create table order_detail
 /*==============================================================*/
 create table orders
 (
-   order_id             int not null,
+   order_id             int not null auto_increment,
    address_id           int,
    user_id              int,
    coupon_id            int,
@@ -204,7 +204,7 @@ create table orders
 /*==============================================================*/
 create table purchase_table
 (
-   purchase_id          int not null,
+   purchase_id          int not null auto_increment,
    admin_id             int,
    purchase_number      int not null,
    purchase_status      varchar(50) not null,
@@ -216,7 +216,7 @@ create table purchase_table
 /*==============================================================*/
 create table timeLimitPromotion
 (
-   promotion_id         int not null,
+   promotion_id         int not null auto_increment,
    goods_id             int,
    promotion_price      double not null,
    promotion_number     int not null,
@@ -230,7 +230,7 @@ create table timeLimitPromotion
 /*==============================================================*/
 create table users
 (
-   user_id              int not null,
+   user_id              int not null auto_increment,
    user_name            varchar(50) not null,
    user_sex             varchar(10) not null,
    user_pwd             varchar(50) not null,
