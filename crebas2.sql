@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/7/3 14:10:01                            */
+/* Created on:     2020/7/3 14:43:28                            */
 /*==============================================================*/
 
 
@@ -24,15 +24,15 @@ drop table if exists menu;
 
 drop table if exists menu_recommand;
 
-drop table if exists "order";
-
 drop table if exists order_detail;
+
+drop table if exists orders;
 
 drop table if exists purchase_table;
 
 drop table if exists timeLimitPromotion;
 
-drop table if exists user;
+drop table if exists users;
 
 /*==============================================================*/
 /* Table: address                                               */
@@ -71,8 +71,8 @@ create table coupon
    coupon_content       varchar(50) not null,
    least_monet          double not null,
    sub_money            double not null,
-   cp_beginTime         timestamp not null,
-   cp_endTime           timestamp not null,
+   cp_beginTime         datetime,
+   cp_endTime           datetime,
    primary key (coupon_id)
 );
 
@@ -83,8 +83,8 @@ create table dis_conn_goods
 (
    dis_inf_id           int not null,
    goods_id             int not null,
-   begin_time           timestamp not null,
-   end_time             char(10) not null,
+   begin_time           datetime not null,
+   end_time             datetime not null,
    primary key (dis_inf_id, goods_id)
 );
 
@@ -97,8 +97,8 @@ create table discount_inf
    dis_inf_content      varchar(50) not null,
    leastgoods_number    int not null,
    discount             double not null,
-   dis_beginTime        timestamp not null,
-   dis_endTime          timestamp not null,
+   dis_beginTime        datetime,
+   dis_endTime          datetime,
    primary key (dis_inf_id)
 );
 
@@ -139,8 +139,8 @@ create table goods_comment
    goods_id             int not null,
    user_id              int not null,
    comment_content      varchar(50) not null,
-   comment_date         timestamp not null,
-   comment_star         timestamp not null,
+   comment_date         datetime not null,
+   comment_star         datetime not null,
    comment_pic          longblob not null,
    primary key (goods_id, user_id)
 );
@@ -170,22 +170,6 @@ create table menu_recommand
 );
 
 /*==============================================================*/
-/* Table: "order"                                               */
-/*==============================================================*/
-create table "order"
-(
-   order_id             int not null,
-   address_id           int,
-   user_id              int,
-   coupon_id            int,
-   origin_price         double not null,
-   settle_price         double not null,
-   require_time         timestamp not null,
-   order_status         varchar(50) not null,
-   primary key (order_id)
-);
-
-/*==============================================================*/
 /* Table: order_detail                                          */
 /*==============================================================*/
 create table order_detail
@@ -197,6 +181,22 @@ create table order_detail
    price                double not null,
    discount             double not null,
    primary key (order_id, goods_id, dis_inf_id)
+);
+
+/*==============================================================*/
+/* Table: orders                                                */
+/*==============================================================*/
+create table orders
+(
+   order_id             int not null,
+   address_id           int,
+   user_id              int,
+   coupon_id            int,
+   origin_price         double not null,
+   settle_price         double not null,
+   require_time         datetime not null,
+   order_status         varchar(50) not null,
+   primary key (order_id)
 );
 
 /*==============================================================*/
@@ -220,15 +220,15 @@ create table timeLimitPromotion
    goods_id             int,
    promotion_price      double not null,
    promotion_number     int not null,
-   promotion_beginTime  timestamp not null,
-   promotion_endTime    timestamp not null,
+   promotion_beginTime  datetime,
+   promotion_endTime    datetime,
    primary key (promotion_id)
 );
 
 /*==============================================================*/
-/* Table: user                                                  */
+/* Table: users                                                 */
 /*==============================================================*/
-create table user
+create table users
 (
    user_id              int not null,
    user_name            varchar(50) not null,
@@ -237,20 +237,20 @@ create table user
    user_phoneNumber     varchar(50) not null,
    user_email           varchar(50) not null,
    user_city            varchar(50) not null,
-   user_regTime         timestamp not null,
+   user_regTime         datetime,
    vip                  bool not null,
-   vip_endTime          timestamp not null,
+   vip_endTime          datetime,
    primary key (user_id)
 );
 
-alter table address add constraint FK_地址配送 foreign key (user_id)
-      references user (user_id) on delete restrict on update restrict;
+alter table address add constraint FK_设置 foreign key (user_id)
+      references users (user_id) on delete restrict on update restrict;
 
 alter table address add constraint FK_配送2 foreign key (order_id)
-      references "order" (order_id) on delete restrict on update restrict;
+      references orders (order_id) on delete restrict on update restrict;
 
 alter table coupon add constraint FK_使用2 foreign key (order_id)
-      references "order" (order_id) on delete restrict on update restrict;
+      references orders (order_id) on delete restrict on update restrict;
 
 alter table dis_conn_goods add constraint FK_dis_conn_goods foreign key (dis_inf_id)
       references discount_inf (dis_inf_id) on delete restrict on update restrict;
@@ -271,7 +271,7 @@ alter table goods_comment add constraint FK_goods_comment foreign key (goods_id)
       references goods (goods_id) on delete restrict on update restrict;
 
 alter table goods_comment add constraint FK_goods_comment2 foreign key (user_id)
-      references user (user_id) on delete restrict on update restrict;
+      references users (user_id) on delete restrict on update restrict;
 
 alter table menu_recommand add constraint FK_menu_recommand foreign key (goods_id)
       references goods (goods_id) on delete restrict on update restrict;
@@ -279,23 +279,23 @@ alter table menu_recommand add constraint FK_menu_recommand foreign key (goods_i
 alter table menu_recommand add constraint FK_menu_recommand2 foreign key (menu_id)
       references menu (menu_id) on delete restrict on update restrict;
 
-alter table "order" add constraint FK_使用 foreign key (coupon_id)
-      references coupon (coupon_id) on delete restrict on update restrict;
-
-alter table "order" add constraint FK_拥有 foreign key (user_id)
-      references user (user_id) on delete restrict on update restrict;
-
-alter table "order" add constraint FK_配送 foreign key (address_id)
-      references address (address_id) on delete restrict on update restrict;
-
 alter table order_detail add constraint FK_order_detail foreign key (order_id)
-      references "order" (order_id) on delete restrict on update restrict;
+      references orders (order_id) on delete restrict on update restrict;
 
 alter table order_detail add constraint FK_order_detail2 foreign key (goods_id)
       references goods (goods_id) on delete restrict on update restrict;
 
 alter table order_detail add constraint FK_order_detail3 foreign key (dis_inf_id)
       references discount_inf (dis_inf_id) on delete restrict on update restrict;
+
+alter table orders add constraint FK_使用 foreign key (coupon_id)
+      references coupon (coupon_id) on delete restrict on update restrict;
+
+alter table orders add constraint FK_拥有 foreign key (user_id)
+      references users (user_id) on delete restrict on update restrict;
+
+alter table orders add constraint FK_配送 foreign key (address_id)
+      references address (address_id) on delete restrict on update restrict;
 
 alter table purchase_table add constraint FK_Relationship_7 foreign key (admin_id)
       references admin (admin_id) on delete restrict on update restrict;
