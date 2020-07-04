@@ -82,8 +82,8 @@ public class FrmLogin extends JDialog implements ActionListener {
                 else{
                     JOptionPane.showMessageDialog(null,  "密码错误","错误提示",JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (BaseException ex) {
-                ex.printStackTrace();
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }

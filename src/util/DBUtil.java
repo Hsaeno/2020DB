@@ -17,7 +17,7 @@ public class DBUtil {
             dataSource = new ComboPooledDataSource();
             dataSource.setUser("root");
             dataSource.setPassword("123456");
-            dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/db2020?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8");
+            dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/shorttermtask?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8");
             dataSource.setDriverClass("com.mysql.jdbc.Driver");
             dataSource.setInitialPoolSize(2);
             dataSource.setMinPoolSize(1);
