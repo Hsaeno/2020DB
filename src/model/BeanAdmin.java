@@ -1,9 +1,18 @@
 package model;
 
 public class BeanAdmin {
+    public static BeanAdmin currentLoginAdmin = null;
     private int admin_id;
     private String admin_name;
     private String admin_loginPwd;
+
+    public static BeanAdmin getCurrentLoginAdmin() {
+        return currentLoginAdmin;
+    }
+
+    public static void setCurrentLoginAdmin(BeanAdmin currentLoginAdmin) {
+        BeanAdmin.currentLoginAdmin = currentLoginAdmin;
+    }
 
     public int getAdmin_id() {
         return admin_id;
