@@ -2,7 +2,7 @@ package model;
 
 public class BeanAdmin {
     public static BeanAdmin currentLoginAdmin = null;
-    private int admin_id;
+    private String admin_id;
     private String admin_name;
     private String admin_loginPwd;
 
@@ -14,11 +14,11 @@ public class BeanAdmin {
         BeanAdmin.currentLoginAdmin = currentLoginAdmin;
     }
 
-    public int getAdmin_id() {
+    public String getAdmin_id() {
         return admin_id;
     }
 
-    public void setAdmin_id(int admin_id) {
+    public void setAdmin_id(String admin_id) {
         this.admin_id = admin_id;
     }
 

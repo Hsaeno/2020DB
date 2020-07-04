@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2020/7/3 14:43:28                            */
+/* Created on:     2020/7/4 21:17:18                            */
 /*==============================================================*/
 
 
@@ -41,7 +41,7 @@ create table address
 (
    address_id           int not null auto_increment,
    order_id             int,
-   user_id              int,
+   user_id              varchar(50),
    province             varchar(50) not null,
    city                 varchar(50) not null,
    region               varchar(50) not null,
@@ -55,7 +55,7 @@ create table address
 /*==============================================================*/
 create table admin
 (
-   admin_id             int not null,
+   admin_id             varchar(50) not null,
    admin_name           varchar(50) not null,
    admin_login_pwd      varchar(50) not null,
    primary key (admin_id)
@@ -137,7 +137,7 @@ create table goods
 create table goods_comment
 (
    goods_id             int not null,
-   user_id              int not null,
+   user_id              varchar(50) not null,
    comment_content      varchar(50) not null,
    comment_date         datetime not null,
    comment_star         datetime not null,
@@ -190,7 +190,7 @@ create table orders
 (
    order_id             int not null auto_increment,
    address_id           int,
-   user_id              int,
+   user_id              varchar(50),
    coupon_id            int,
    origin_price         double not null,
    settle_price         double not null,
@@ -205,7 +205,7 @@ create table orders
 create table purchase_table
 (
    purchase_id          int not null auto_increment,
-   admin_id             int,
+   admin_id             varchar(50),
    purchase_number      int not null,
    purchase_status      varchar(50) not null,
    primary key (purchase_id)
@@ -230,7 +230,7 @@ create table timeLimitPromotion
 /*==============================================================*/
 create table users
 (
-   user_id              int not null,
+   user_id              varchar(50) not null,
    user_name            varchar(50) not null,
    user_sex             varchar(10) not null,
    user_pwd             varchar(50) not null,

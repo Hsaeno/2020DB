@@ -34,7 +34,7 @@ public class AdminManager implements IAdminManager {
                 throw new BusinessException("管理员不存在");
             }
             BeanAdmin admin = new BeanAdmin();
-            admin.setAdmin_id(rs.getInt(1));
+            admin.setAdmin_id(rs.getString(1));
             admin.setAdmin_name(rs.getString(2));
             admin.setAdmin_loginPwd(rs.getString(3));
             if (!admin.getAdmin_loginPwd().equals(pwd))

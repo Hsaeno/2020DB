@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class BeanUsers {
     public static BeanUsers currentLoginUser = null;
-    private int user_id;
+    private String  user_id;
     private String user_name;
     private String user_sex;
 
@@ -14,15 +14,15 @@ public class BeanUsers {
     private String user_phoneNumber;
     private String user_email;
     private String user_city;
-    private String user_regTime;
+    private Date user_regTime;
     private Boolean vip;
     private Date vip_endTime;
 
-    public int getUser_id() {
+    public String  getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(String  user_id) {
         this.user_id = user_id;
     }
 
@@ -74,11 +74,11 @@ public class BeanUsers {
         this.user_city = user_city;
     }
 
-    public String getUser_regTime() {
+    public Date getUser_regTime() {
         return user_regTime;
     }
 
-    public void setUser_regTime(String user_regTime) {
+    public void setUser_regTime(Date user_regTime) {
         this.user_regTime = user_regTime;
     }
 

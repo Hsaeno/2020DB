@@ -69,47 +69,41 @@ public class FrmLogin extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this.btnUserLogin)
-        {
+        if (e.getSource() == this.btnUserLogin) {
             String userid = this.edtUserId.getText();
             String pwd = new String(this.edtPwd.getPassword());
-            try{
+            try {
                 BeanUsers.currentLoginUser = MainControl.userManager.login(userid, pwd);
-                if (pwd.equals(BeanUsers.currentLoginUser.getUser_pwd()))
-                {
+                if (pwd.equals(BeanUsers.currentLoginUser.getUser_pwd())) {
                     setVisible(false);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null,  "密码错误","错误提示",JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "密码错误", "错误提示", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (BaseException e1) {
-                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-        }
-        else if (e.getSource() == this.btnCancel) {
+        } else if (e.getSource() == this.btnCancel) {
             System.exit(0);
-        }else if (e.getSource() == this.btnAdminLogin)
-        {
+        } else if (e.getSource() == this.btnAdminLogin) {
             String admin_id = this.edtUserId.getText();
             String pwd = new String(this.edtPwd.getPassword());
-            try{
+            try {
                 BeanAdmin.currentLoginAdmin = MainControl.adminManager.login(admin_id, pwd);
-                if (pwd.equals(BeanAdmin.currentLoginAdmin.getAdmin_loginPwd()))
-                {
+                if (pwd.equals(BeanAdmin.currentLoginAdmin.getAdmin_loginPwd())) {
                     setVisible(false);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null,  "密码错误","错误提示",JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "密码错误", "错误提示", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (BaseException e1) {
-                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+        } else if (e.getSource() == this.btnRegister) {
+            FrmRegister dlg = new FrmRegister(this, "注册", true);
+            dlg.setVisible(true);
+
         }
-        /*else if(e.getSource()==this.btnRegister){
-            FrmRegister dlg=new FrmRegister(this,"注册",true);
-            dlg.setVisible(true);*/
 
     }
 }

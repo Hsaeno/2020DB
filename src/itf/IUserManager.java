@@ -13,7 +13,7 @@ public interface IUserManager {
      * @return
      * @throws BaseException
      */
-    public BeanUsers reg(String userid, String pwd,String pwd2) throws BaseException;
+    public BeanUsers reg(String userid, String pwd, String pwd2,String name,String sex,String emain,String phoneNumber,String city) throws BaseException;
     /**
      * 登陆
      * 1、如果用户不存在或者密码错误，抛出一个异常
