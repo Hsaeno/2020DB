@@ -55,7 +55,7 @@ create table address
 /*==============================================================*/
 create table admin
 (
-   admin_id             int not null auto_increment,
+   admin_id             int not null,
    admin_name           varchar(50) not null,
    admin_login_pwd      varchar(50) not null,
    primary key (admin_id)
@@ -230,7 +230,7 @@ create table timeLimitPromotion
 /*==============================================================*/
 create table users
 (
-   user_id              int not null auto_increment,
+   user_id              int not null,
    user_name            varchar(50) not null,
    user_sex             varchar(10) not null,
    user_pwd             varchar(50) not null,

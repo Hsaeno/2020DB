@@ -25,7 +25,7 @@ public class AdminManager implements IAdminManager {
         }
         try {
             conn = DBUtil.getConnection();
-            String sql = " select * from users where admin_id = ? ";
+            String sql = " select * from admin where admin_id = ? ";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, userid);
             java.sql.ResultSet rs = pst.executeQuery();
