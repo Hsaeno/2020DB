@@ -3,9 +3,13 @@ package model;
 import java.util.Date;
 
 public class BeanUsers {
+    public static BeanUsers currentLoginUser = null;
     private int user_id;
     private String user_name;
     private String user_sex;
+
+
+
     private String user_pwd;
     private String user_phoneNumber;
     private String user_email;
@@ -92,5 +96,12 @@ public class BeanUsers {
 
     public void setVip_endTime(Date vip_endTime) {
         this.vip_endTime = vip_endTime;
+    }
+    public static BeanUsers getCurrentLoginUser() {
+        return currentLoginUser;
+    }
+
+    public static void setCurrentLoginUser(BeanUsers currentLoginUser) {
+        BeanUsers.currentLoginUser = currentLoginUser;
     }
 }
