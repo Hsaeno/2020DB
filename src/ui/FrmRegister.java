@@ -86,11 +86,11 @@ public class FrmRegister extends JDialog implements ActionListener{
             String sex = "";
             if(this.btnSexM.isSelected())
             {
-                sex = this.btnSexM.getText();
+                sex = "男";
             }
             if(this.btnSexW.isSelected())
             {
-                sex = this.btnSexW.getText();
+                sex = "女";
             }
             String email = new String(this.edtEmail.getText());
             String phone = new String(this.edtPhone.getText());
