@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,7 +27,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenu menu_AdminManage=new JMenu("管理员信息管理");
     private JMenu menu_UserManage=new JMenu("用户信息管理");
     private JMenu menu_VipManage=new JMenu("超级会员");
-    private JMenuItem  menuItem_UserModifyInf=new JMenuItem("个人信息修改");
+    private JMenuItem  menuItem_UserModifyInf=new JMenuItem("个人信息修改/查看");
     private JMenuItem  menuItem_UserModifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AdminModifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AdminAdd=new JMenuItem("管理员增加");
@@ -50,11 +51,14 @@ public class FrmMain extends JFrame implements ActionListener{
             this.menuItem_UserModifyInf.addActionListener(this);
             this.menu_VipManage.add(this.menuItem_VipJoin);
             this.menu_VipManage.add(this.menuItem_VipInf);
+            this.menuItem_VipJoin.addActionListener(this);
+            this.menuItem_VipInf.addActionListener(this);
             menubar.add(menu_PersonalManage);
             menubar.add(menu_VipManage);
             this.setJMenuBar(menubar);
 
             statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+
             if (!BeanUsers.currentLoginUser.getVip())
             {
                 JLabel label=new JLabel("您好! 尊敬的用户:"+ BeanUsers.currentLoginUser.getUser_name());
@@ -118,17 +122,17 @@ public class FrmMain extends JFrame implements ActionListener{
             FrmAdminRegister dlg = new FrmAdminRegister(this,"管理员增加",true);
             dlg.setVisible(true);
         }
+        else if (e.getSource() == this.menuItem_VipJoin)
+        {
+            FrmVipJoin dlg = new FrmVipJoin(this,"会员订阅",true);
+            dlg.setVisible(true);
+        }
         else if (e.getSource() == this.menuItem_AdminManageUser)
         {
 
         }
         else if (e.getSource() == this.menuItem_VipInf)
-        {
-
-        }
-        else if (e.getSource() == this.menuItem_VipJoin)
-        {
-
-        }
+        {    FrmShowVip dlg = new FrmShowVip(this,"会员信息",true);
+             dlg.setVisible(true);
     }
-}
+}}

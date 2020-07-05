@@ -14,7 +14,7 @@ public class FrmUserModifyInf extends JDialog implements ActionListener {
 
     private JPanel toolBar = new JPanel();
     private JPanel workPane = new JPanel();
-    private JButton btnOk = new JButton("确定");
+    private JButton btnOk = new JButton("修改");
     private JButton btnCancel = new JButton("取消");
     private JLabel labelPwd = new JLabel("确认密码：");
     private JLabel labelName = new JLabel("姓名：");

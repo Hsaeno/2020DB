@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.net.BindException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import itf.IUserManager;
@@ -135,7 +137,24 @@ public class UserManager implements IUserManager {
             user.setUser_email(rs.getString(6));
             user.setUser_city(rs.getString(7));
             user.setUser_regTime(rs.getTimestamp(8));
-            user.setVip(rs.getBoolean(9));
+            if (rs.getTimestamp(10)!= null)
+            {
+                if(rs.getTimestamp(10).getTime() <= System.currentTimeMillis())
+            {
+                user.setVip(false);
+            }
+            else {
+                user.setVip(true);
+            }
+            }
+            else {
+                user.setVip(rs.getBoolean(9));
+            }
+            sql = " update users set vip = ? where user_id = ? ";
+            pst = conn.prepareStatement(sql);
+            pst.setBoolean(1,user.getVip());
+            pst.setString(2,userid);
+            pst.executeUpdate();
             user.setVip_endTime(rs.getTimestamp(10));
             if (!user.getUser_pwd().equals(pwd))
             {
@@ -255,4 +274,51 @@ public class UserManager implements IUserManager {
 
         }
     }
+
+    @Override
+    public void ManageVip(BeanUsers user, int mode) throws BaseException {
+        Connection conn = null;
+        try {
+            conn = DBUtil.getConnection();
+            String id = user.getUser_id();
+            String sql = "select vip,vip_endTime from users where user_id = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,id);
+            java.sql.ResultSet rs = pst.executeQuery();
+            rs.next();
+            boolean vip = rs.getBoolean(1);
+            Calendar c = Calendar.getInstance();
+            if (vip)
+            {
+                c.setTime(rs.getTimestamp(2));
+            }
+            else
+            {
+                Date d = new Date(System.currentTimeMillis());
+                c.setTime(d);
+            }
+            c.add(Calendar.MONTH,mode);
+            java.util.Date date = c.getTime();
+            sql = "update users set vip = ?,vip_endTime = ? where user_id = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1,"1");
+            pst.setTimestamp(2,new java.sql.Timestamp(date.getTime()));
+            pst.setString(3,id);
+            pst.executeUpdate();
+            rs.close();
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
+
 }
