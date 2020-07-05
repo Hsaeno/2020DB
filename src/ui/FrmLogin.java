@@ -23,7 +23,9 @@ import model.BeanAdmin;
 import util.BaseException;
 import control.MainControl;
 
+
 public class FrmLogin extends JDialog implements ActionListener {
+    public static int flag = -1;  //用户是1,管理员是0;
     private JPanel toolBar = new JPanel();
     private JPanel workPane = new JPanel();
     private JButton btnUserLogin = new JButton("用户登陆");
@@ -75,6 +77,7 @@ public class FrmLogin extends JDialog implements ActionListener {
             try {
                 BeanUsers.currentLoginUser = MainControl.userManager.login(userid, pwd);
                 if (pwd.equals(BeanUsers.currentLoginUser.getUser_pwd())) {
+                    flag = 1;
                     setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(null, "密码错误", "错误提示", JOptionPane.ERROR_MESSAGE);
@@ -91,6 +94,7 @@ public class FrmLogin extends JDialog implements ActionListener {
             try {
                 BeanAdmin.currentLoginAdmin = MainControl.adminManager.login(admin_id, pwd);
                 if (pwd.equals(BeanAdmin.currentLoginAdmin.getAdmin_loginPwd())) {
+                    flag = 0;
                     setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(null, "密码错误", "错误提示", JOptionPane.ERROR_MESSAGE);

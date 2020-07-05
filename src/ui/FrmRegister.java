@@ -18,8 +18,8 @@ public class FrmRegister extends JDialog implements ActionListener{
 
     private JPanel toolBar = new JPanel();
     private JPanel workPane = new JPanel();
-    private Button btnOk = new Button("注册");
-    private Button btnCancel = new Button("取消");
+    private JButton btnOk = new JButton("注册");
+    private JButton btnCancel = new JButton("取消");
 
     private JLabel labelUser = new JLabel("用户：");
     private JLabel labelPwd = new JLabel("密码：");

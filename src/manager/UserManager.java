@@ -161,6 +161,98 @@ public class UserManager implements IUserManager {
 
     @Override
     public void changePwd(BeanUsers user, String oldPwd, String newPwd, String newPwd2) throws BaseException {
+        Connection conn = null;
+        if(!oldPwd.equals(user.getUser_pwd()))
+        {
+            throw new BusinessException("原密码错误");
+        }
+        if("".equals(newPwd) || "".equals(newPwd2)|| "".equals(oldPwd) || newPwd==null || newPwd2==null || oldPwd==null )
+        {
+            throw new BusinessException("密码不能为空");
+        }
+        if (!newPwd.equals(newPwd2))
+        {
+            throw new BusinessException("两次密码不一致");
+        }
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "update users set user_pwd = ? where user_id = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,newPwd);
+            pst.setString(2,user.getUser_id());
+            pst.executeUpdate();
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
 
+    @Override
+    public void changeInf(BeanUsers user, String passwd,String name, String email, String phone, String city) throws BaseException {
+        Connection conn = null;
+        if(name.length()>10 || name.length()<1)
+        {
+            throw new BusinessException("名称应在1-10个字符之间");
+        }
+        Pattern p = Pattern.compile("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\\.([a-zA-Z0-9_-])+)+$");
+        if (!(p.matcher(email).matches()))
+        {
+            throw new BusinessException("邮箱格式错误");
+        }
+        if(phone.length()!=11)
+        {
+            throw new BusinessException("请输入11位格式手机号码");
+        }
+        for(int i = 0;i<phone.length();i++)
+        {
+            if (!Character.isDigit(phone.charAt(i)))
+            {
+                throw new BusinessException("手机号码应为纯数字");
+            }
+        }
+        try {
+            conn = DBUtil.getConnection();
+            String id = user.getUser_id();
+            String sql = "select user_pwd from users where user_id = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,id);
+            java.sql.ResultSet rs = pst.executeQuery();
+            if (rs.next())
+            {
+                if (!rs.getString(1).equals(passwd))
+                    throw new BusinessException("验证密码错误");
+            }
+            sql = "update users set user_name = ?,user_phoneNumber = ?,user_email = ?, user_city = ? where user_id = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1,name);
+            pst.setString(2,phone);
+            pst.setString(3,email);
+            pst.setString(4,city);
+            pst.setString(5,id);
+            pst.executeUpdate();
+            rs.close();
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+        }
     }
 }
