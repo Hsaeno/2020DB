@@ -1,6 +1,9 @@
 package itf;
 import model.BeanUsers;
 import util.BaseException;
+
+import java.util.List;
+
 public interface IUserManager {
     /**
      * 注册：
@@ -37,4 +40,6 @@ public interface IUserManager {
     public void changeInf(BeanUsers user, String name,String email,String phone,String city,String passwd) throws BaseException;
 
     public void ManageVip(BeanUsers user,int mode) throws BaseException;
+
+    public List<BeanUsers> loadAll()throws BaseException;
 }

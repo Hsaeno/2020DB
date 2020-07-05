@@ -3,6 +3,7 @@ package model;
 import java.util.Date;
 
 public class BeanUsers {
+    public static final String[] tableTitles={"账号","名称","性别","密码","手机","邮箱","城市","注册时间","VIP","VIP到期时间"};
     public static BeanUsers currentLoginUser = null;
     private String  user_id;
     private String user_name;
@@ -103,5 +104,30 @@ public class BeanUsers {
 
     public static void setCurrentLoginUser(BeanUsers currentLoginUser) {
         BeanUsers.currentLoginUser = currentLoginUser;
+    }
+    public String getCell(int col)
+    {
+        if (col == 0)
+            return this.getUser_id();
+        else if(col==1)
+            return this.getUser_name();
+        else if(col==2)
+            return this.getUser_sex();
+        else if (col==3)
+            return this.getUser_pwd();
+        else if (col==4)
+            return this.getUser_phoneNumber();
+        else if (col==5)
+            return this.getUser_email();
+        else if (col==6)
+            return this.getUser_city();
+        else if (col==7)
+            return this.getUser_regTime().toString();
+        else if (col==8)
+            return this.getVip().toString();
+        else if (col==9)
+            return this.getVip_endTime().toString();
+        else
+            return "";
     }
 }

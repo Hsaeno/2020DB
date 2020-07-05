@@ -26,7 +26,6 @@ public class FrmShowVip extends JDialog implements ActionListener {
         workPane.add(labelUser);
         workPane.add(edtUserId);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.println(sdf.format(BeanUsers.currentLoginUser.getVip_endTime()));
         edtTime.setText(sdf.format(BeanUsers.currentLoginUser.getVip_endTime()));
         edtTime.setEditable(false);
         workPane.add(labelTime);

@@ -1,6 +1,8 @@
 package ui;
+import control.MainControl;
 import model.BeanAdmin;
 import model.BeanUsers;
+import util.BaseException;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -10,13 +12,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Date;
+import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 
 public class FrmMain extends JFrame implements ActionListener{
@@ -35,8 +34,11 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_VipJoin=new JMenuItem("加入/续费会员");
     private JMenuItem  menuItem_VipInf=new JMenuItem("查看会员信息");
 
+
     private FrmLogin dlgLogin = null;
     private JPanel statusBar = new JPanel();
+
+
     public FrmMain()
     {
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -129,7 +131,8 @@ public class FrmMain extends JFrame implements ActionListener{
         }
         else if (e.getSource() == this.menuItem_AdminManageUser)
         {
-
+            FrmAdminManageUserWindow dlg = new FrmAdminManageUserWindow(this,"查看用户信息",true);
+            dlg.setVisible(true);
         }
         else if (e.getSource() == this.menuItem_VipInf)
         {    FrmShowVip dlg = new FrmShowVip(this,"会员信息",true);

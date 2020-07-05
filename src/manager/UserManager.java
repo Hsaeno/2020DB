@@ -4,8 +4,10 @@ import javax.swing.*;
 import java.net.BindException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import itf.IUserManager;
@@ -318,6 +320,48 @@ public class UserManager implements IUserManager {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+        }
+    }
+
+    @Override
+    public List<BeanUsers> loadAll() throws BaseException {
+        List<BeanUsers> result=new ArrayList<BeanUsers>();
+        Connection conn = null;
+        try {
+            conn = DBUtil.getConnection();
+            String user_id = BeanUsers.currentLoginUser.getUser_id();
+            String sql = "select * from users  order by user_id";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = pst.executeQuery();
+            while(rs.next())
+            {
+                BeanUsers bu = new BeanUsers();
+                bu.setUser_id(rs.getString(1));
+                bu.setUser_name(rs.getString(2));
+                bu.setUser_sex(rs.getString(3));
+                bu.setUser_pwd(rs.getString(4));
+                bu.setUser_phoneNumber(rs.getString(5));
+                bu.setUser_email(rs.getString(6));
+                bu.setUser_city(rs.getString(7));
+                bu.setUser_regTime(rs.getTimestamp(8));
+                bu.setVip(rs.getBoolean(9));
+                bu.setVip_endTime(rs.getTimestamp(10));
+                result.add(bu);
+            }
+            return result;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
         }
     }
 
