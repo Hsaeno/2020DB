@@ -42,4 +42,6 @@ public interface IUserManager {
     public void ManageVip(BeanUsers user,int mode) throws BaseException;
 
     public List<BeanUsers> loadAll()throws BaseException;
+
+    public BeanUsers load(String userid)throws BaseException;
 }

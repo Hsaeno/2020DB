@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BeanUsers {
@@ -107,6 +108,7 @@ public class BeanUsers {
     }
     public String getCell(int col)
     {
+        SimpleDateFormat sdt = new SimpleDateFormat("yyyy-MM-dd");
         if (col == 0)
             return this.getUser_id();
         else if(col==1)
@@ -122,11 +124,17 @@ public class BeanUsers {
         else if (col==6)
             return this.getUser_city();
         else if (col==7)
-            return this.getUser_regTime().toString();
+            return sdt.format(this.getUser_regTime());
         else if (col==8)
-            return this.getVip().toString();
+        { if (this.getVip())
+                return "是";
+            else
+                return "否";}
         else if (col==9)
-            return this.getVip_endTime().toString();
+            if (this.getVip_endTime() == null)
+                return "null";
+            else
+                return sdt.format(this.getVip_endTime());
         else
             return "";
     }

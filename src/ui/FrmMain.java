@@ -30,7 +30,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_UserModifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AdminModifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AdminAdd=new JMenuItem("管理员增加");
-    private JMenuItem  menuItem_AdminManageUser=new JMenuItem("用户信息修改");
+    private JMenuItem  menuItem_AdminManageUser=new JMenuItem("用户信息查看");
     private JMenuItem  menuItem_VipJoin=new JMenuItem("加入/续费会员");
     private JMenuItem  menuItem_VipInf=new JMenuItem("查看会员信息");
 

@@ -26,7 +26,13 @@ public class FrmShowVip extends JDialog implements ActionListener {
         workPane.add(labelUser);
         workPane.add(edtUserId);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        edtTime.setText(sdf.format(BeanUsers.currentLoginUser.getVip_endTime()));
+        if(BeanUsers.currentLoginUser.getVip())
+        {
+            edtTime.setText(sdf.format(BeanUsers.currentLoginUser.getVip_endTime()));
+        }
+        else{
+            edtTime.setText("您还不是会员哦!");
+        }
         edtTime.setEditable(false);
         workPane.add(labelTime);
         workPane.add(edtTime);

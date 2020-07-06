@@ -365,4 +365,47 @@ public class UserManager implements IUserManager {
         }
     }
 
+    @Override
+    public BeanUsers load(String userid) throws BaseException {
+        Connection conn = null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from users  where user_id = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,userid);
+            java.sql.ResultSet rs = pst.executeQuery();
+            BeanUsers bu = new BeanUsers();
+            if(rs.next())
+            {
+                bu.setUser_id(rs.getString(1));
+                bu.setUser_name(rs.getString(2));
+                bu.setUser_sex(rs.getString(3));
+                bu.setUser_pwd(rs.getString(4));
+                bu.setUser_phoneNumber(rs.getString(5));
+                bu.setUser_email(rs.getString(6));
+                bu.setUser_city(rs.getString(7));
+                bu.setUser_regTime(rs.getTimestamp(8));
+                bu.setVip(rs.getBoolean(9));
+                bu.setVip_endTime(rs.getTimestamp(10));
+            }
+            else {
+                return null;
+            }
+            return bu;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+        }
+    }
+
 }

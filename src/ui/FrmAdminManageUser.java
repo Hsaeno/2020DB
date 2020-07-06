@@ -16,41 +16,45 @@ public class FrmAdminManageUser extends JDialog implements ActionListener {
     private JPanel workPane = new JPanel();
     private Object tblUserTitle[] = BeanUsers.tableTitles;
     private Object tblUserData[][];
+
     private JButton btnCancel = new JButton("退出");
     DefaultTableModel tabUserModel = new DefaultTableModel();
     private JTable dataTableUser = new JTable(tabUserModel);
+    private JLabel labelNo = new JLabel("查询不到该用户");
 
-    List<BeanUsers> allUser = null;
-    private void reloadUserTable()
-    {
-        try{
-            allUser = MainControl.userManager.loadAll();
+    BeanUsers User = null;
+    private void reloadUserTable(String userid) throws BaseException {
+        User = MainControl.userManager.load(userid);
+
+        if (User == null)
+        {
+            workPane.add(labelNo);
+            this.getContentPane().add(workPane, BorderLayout.CENTER);
         }
-        catch (BaseException e){
-            JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
-            return;
+        else
+        {
+
+            tblUserData = new Object[1][BeanUsers.tableTitles.length];
+            for (int i=0;i<1;i++)
+                for (int j = 0;j<BeanUsers.tableTitles.length;j++)
+                    tblUserData[i][j] = User.getCell(j);
+
+            tabUserModel.setDataVector(tblUserData,tblUserTitle);
+            this.dataTableUser.validate();
+            this.dataTableUser.repaint();
+            this.getContentPane().add(new JScrollPane(this.dataTableUser));
+            System.out.println(User);
         }
-
-        tblUserData = new Object[allUser.size()][BeanUsers.tableTitles.length];
-        for (int i=0;i<allUser.size();i++)
-            for (int j = 0;j<BeanUsers.tableTitles.length;j++)
-                tblUserData[i][j] = allUser.get(i).getCell(j);
-
-        tabUserModel.setDataVector(tblUserData,tblUserTitle);
-        this.dataTableUser.validate();
-        this.dataTableUser.repaint();
     }
-    public FrmAdminManageUser(JFrame f, String s, boolean b)
-    {
+    public FrmAdminManageUser(FrmAdminManageUserWindow f, String s, boolean b,String userid) throws BaseException {
         super(f, s, b);
         toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        toolBar.add(btnOk);
         toolBar.add(btnCancel);
         this.getContentPane().add(toolBar, BorderLayout.SOUTH);
-        workPane.add(labelName);
-        workPane.add(edtName);
-        this.getContentPane().add(workPane, BorderLayout.CENTER);
-        this.setSize(320, 180);
+        this.setSize(1000, 200);
+        this.reloadUserTable(userid);
+
+
         // 屏幕居中显示
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
@@ -58,7 +62,6 @@ public class FrmAdminManageUser extends JDialog implements ActionListener {
                 (int) (height - this.getHeight()) / 2);
 
         this.validate();
-        this.btnOk.addActionListener(this);
         this.btnCancel.addActionListener(this);
 
     }
@@ -68,4 +71,4 @@ public class FrmAdminManageUser extends JDialog implements ActionListener {
             this.setVisible(false);
         }
     }
-}
+
