@@ -21,7 +21,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenu menu_AdminManage=new JMenu("管理员信息管理");
     private JMenu menu_UserManage=new JMenu("用户信息管理");
     private JMenu menu_VipManage=new JMenu("超级会员");
-    private JMenu menu_FreshManage = new JMenu("生鲜管理");
+    private JMenu menu_GoodsManage = new JMenu("关于商品");
     private JMenuItem  menuItem_UserModifyInf=new JMenuItem("个人信息修改/查看");
     private JMenuItem  menuItem_UserModifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AdminModifyPwd=new JMenuItem("密码修改");
@@ -29,10 +29,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_AdminManageUser=new JMenuItem("用户信息查看");
     private JMenuItem  menuItem_VipJoin=new JMenuItem("加入/续费会员");
     private JMenuItem  menuItem_VipInf=new JMenuItem("查看会员信息");
-    private JMenuItem  menuItem_ShowFresh=new JMenuItem("显示生鲜信息");
-    private JMenuItem  menuItem_AddFresh=new JMenuItem("增加生鲜信息");
-    private JMenuItem  menuItem_DeleteFresh=new JMenuItem("删除生鲜信息");
-    private JMenuItem  menuItem_ModifyFresh=new JMenuItem("修改生鲜信息");
+    private JMenuItem  menuItem_GoodsManage=new JMenuItem("商品信息管理");
 
     private FrmLogin dlgLogin = null;
     private JPanel statusBar = new JPanel();
@@ -82,18 +79,12 @@ public class FrmMain extends JFrame implements ActionListener{
             this.menu_AdminManage.add(this.menuItem_AdminModifyPwd);
             this.menu_AdminManage.add(this.menuItem_AdminAdd);
             this.menu_UserManage.add(this.menuItem_AdminManageUser);
-            this.menu_FreshManage.add(this.menuItem_ShowFresh);
-            this.menu_FreshManage.add(this.menuItem_AddFresh);
-            this.menu_FreshManage.add(this.menuItem_ModifyFresh);
-            this.menu_FreshManage.add(this.menuItem_DeleteFresh);
+            this.menu_GoodsManage.add(this.menuItem_GoodsManage);
             this.menuItem_AdminModifyPwd.addActionListener(this);
             this.menuItem_AdminAdd.addActionListener(this);
             this.menuItem_AdminManageUser.addActionListener(this);
-            this.menuItem_ShowFresh.addActionListener(this);
-            this.menuItem_AddFresh.addActionListener(this);
-            this.menuItem_ModifyFresh.addActionListener(this);
-            this.menuItem_DeleteFresh.addActionListener(this);
-            menubar.add(menu_FreshManage);
+            this.menuItem_GoodsManage.addActionListener(this);
+            menubar.add(menu_GoodsManage);
             menubar.add(menu_UserManage);
             menubar.add(menu_AdminManage);
             this.setJMenuBar(menubar);
@@ -148,9 +139,9 @@ public class FrmMain extends JFrame implements ActionListener{
         {    FrmShowVip dlg = new FrmShowVip(this,"会员信息",true);
              dlg.setVisible(true);
     }
-        else if (e.getSource() == this.menuItem_ShowFresh)
+        else if (e.getSource() == this.menuItem_GoodsManage)
         {
-            FrmAdminShowFresh dlg = new FrmAdminShowFresh(this,"生鲜信息",true);
+            FrmAdminShowFresh dlg = new FrmAdminShowFresh(this,"商品信息",true);
             dlg.setVisible(true);
         }
 }}

@@ -65,7 +65,7 @@ public class FreshManager implements IFreshManager{
         }
         try{
             conn = DBUtil.getConnection();
-            String sql = "select * from fresh where name = ?";
+            String sql = "select * from fresh where catagory_name = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1,name);
             java.sql.ResultSet rs = pst.executeQuery();
@@ -82,7 +82,8 @@ public class FreshManager implements IFreshManager{
             sql = "select catagory_id from fresh where catagory_name = ?";
             pst = conn.prepareStatement(sql);
             pst.setString(1,name);
-            pst.executeUpdate();
+            rs = pst.executeQuery();
+            rs.next();
             int id = rs.getInt(1);
             bf.setCategory_id(id);
             bf.setCategory_name(name);
@@ -104,7 +105,7 @@ public class FreshManager implements IFreshManager{
     }
 
     @Override
-    public void update(int id,String name, String description) throws BaseException {
+    public void update(int id,String name, String description,String oldName) throws BaseException {
         Connection conn = null;
         if ("".equals(name) || name == null)
         {
@@ -116,11 +117,11 @@ public class FreshManager implements IFreshManager{
         }
         try{
             conn = DBUtil.getConnection();
-            String sql = "select * from fresh where name = ?";
+            String sql = "select * from fresh where catagory_name = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1,name);
             java.sql.ResultSet rs = pst.executeQuery();
-            if (rs.next())
+            if (rs.next() &&!rs.getString(1).equals(oldName))
             {
                 throw new BusinessException("该名称已存在,请更换");
             }
@@ -147,6 +148,35 @@ public class FreshManager implements IFreshManager{
 
     @Override
     public void delete(int id) throws BaseException {
-
+        Connection conn = null;
+        try{
+            conn = DBUtil.getConnection();
+            String sql = "select * from goods where catagory_id = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1,id);
+            java.sql.ResultSet rs = pst.executeQuery();
+            if (rs.next())
+            {
+                throw new BusinessException("该类别中仍存在商品，无法删除！");
+            }
+            sql = "delete from fresh where catagory_id = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1,id);
+            pst.executeUpdate();
+            pst.close();
+            rs.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
     }
 }

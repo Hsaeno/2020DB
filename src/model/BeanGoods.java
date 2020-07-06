@@ -1,16 +1,19 @@
 package model;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 public class BeanGoods {
     private int goods_id;
-    private int purchase_id;
     private int category_id;
-    private int promotion_id;
     private String goods_name;
     private double goods_price;
     private double vip_price;
     private int goods_number;
     private double spec;
-    private double detail;
+    private String detail;
+
+    public static final String[] tableTitles={"序号","类别","名称","价格","规格","会员价","详情","数量"};
+
 
     public int getGoods_id() {
         return goods_id;
@@ -20,13 +23,6 @@ public class BeanGoods {
         this.goods_id = goods_id;
     }
 
-    public int getPurchase_id() {
-        return purchase_id;
-    }
-
-    public void setPurchase_id(int purchase_id) {
-        this.purchase_id = purchase_id;
-    }
 
     public int getCategory_id() {
         return category_id;
@@ -36,13 +32,6 @@ public class BeanGoods {
         this.category_id = category_id;
     }
 
-    public int getPromotion_id() {
-        return promotion_id;
-    }
-
-    public void setPromotion_id(int promotion_id) {
-        this.promotion_id = promotion_id;
-    }
 
     public String getGoods_name() {
         return goods_name;
@@ -84,11 +73,33 @@ public class BeanGoods {
         this.spec = spec;
     }
 
-    public double getDetail() {
+    public String getDetail() {
         return detail;
     }
 
-    public void setDetail(double detail) {
+    public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public String getCell(int col)
+    {
+        if (col==0)
+            return Integer.toString(this.getGoods_id());
+        else if(col==1)
+            return Integer.toString(this.getCategory_id());
+        else if(col==2)
+            return this.getGoods_name();
+        else if (col==3)
+            return Double.toString(this.getGoods_price());
+        else if (col==4)
+            return Double.toString(this.getSpec());
+        else if (col==5)
+            return Double.toString(this.getVip_price());
+        else if (col==6)
+            return this.getDetail();
+        else if (col==7)
+            return Integer.toString(this.getGoods_number());
+        else
+            return "";
     }
 }
