@@ -1,10 +1,12 @@
 package model;
 
+import java.text.SimpleDateFormat;
+
 public class BeanFresh {
     private int category_id;
     private String category_name;
     private String description;
-
+    public static final String[] tableTitles={"序号","名称","描述"};
     public int getCategory_id() {
         return category_id;
     }
@@ -27,5 +29,17 @@ public class BeanFresh {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCell(int col)
+    {
+        if (col==0)
+            return Integer.toString(this.getCategory_id());
+        else if (col==1)
+            return this.getCategory_name();
+        else if (col==2)
+            return this.getDescription();
+        else
+            return "";
     }
 }

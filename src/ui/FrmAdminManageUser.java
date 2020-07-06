@@ -43,7 +43,6 @@ public class FrmAdminManageUser extends JDialog implements ActionListener {
             this.dataTableUser.validate();
             this.dataTableUser.repaint();
             this.getContentPane().add(new JScrollPane(this.dataTableUser));
-            System.out.println(User);
         }
     }
     public FrmAdminManageUser(FrmAdminManageUserWindow f, String s, boolean b,String userid) throws BaseException {
