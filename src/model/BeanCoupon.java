@@ -1,15 +1,17 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BeanCoupon {
     private int coupon_id;
-    private int order_id;
     private String coupon_content;
     private double least_monet;
     private double sub_money;
     private Date cp_beginTime;
     private Date cp_endTime;
+
+    public static final String[] tableTitles={"序号","内存","最低金额","减免金额","开始时间","结束时间"};
 
     public int getCoupon_id() {
         return coupon_id;
@@ -19,13 +21,6 @@ public class BeanCoupon {
         this.coupon_id = coupon_id;
     }
 
-    public int getOrder_id() {
-        return order_id;
-    }
-
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
-    }
 
     public String getCoupon_content() {
         return coupon_content;
@@ -65,5 +60,25 @@ public class BeanCoupon {
 
     public void setCp_endTime(Date cp_endTime) {
         this.cp_endTime = cp_endTime;
+    }
+
+
+    public String getCell(int col)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (col==0)
+            return Integer.toString(this.getCoupon_id());
+        else if (col==1)
+            return this.getCoupon_content();
+        else if (col==2)
+            return Double.toString(this.getLeast_monet());
+        else if (col==3)
+            return Double.toString(this.getSub_money());
+        else if (col==4)
+            return sdf.format(this.getCp_beginTime());
+        else if (col==5)
+            return sdf.format(this.getCp_endTime());
+        else
+            return "";
     }
 }

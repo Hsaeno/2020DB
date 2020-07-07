@@ -180,4 +180,9 @@ public class FrmMain extends JFrame implements ActionListener{
             FrmPurchaseOrderManage dlg = new FrmPurchaseOrderManage(this,"订单状态更新",true);
             dlg.setVisible(true);
         }
+        else if (e.getSource() == this.menuItem_CouponManage)
+        {
+            FrmCouponManage dlg = new FrmCouponManage(this,"优惠信息",true);
+            dlg.setVisible(true);
+        }
 }}
