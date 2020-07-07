@@ -1,6 +1,8 @@
 package ui;
+import control.MainControl;
 import model.BeanAdmin;
 import model.BeanUsers;
+import util.BaseException;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -22,6 +24,8 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenu menu_UserManage=new JMenu("用户信息管理");
     private JMenu menu_VipManage=new JMenu("超级会员");
     private JMenu menu_GoodsManage = new JMenu("关于商品");
+    private JMenu menu_couponManage = new JMenu("优惠信息相关");
+    private JMenu menu_purchaseManage = new JMenu("采购相关");
     private JMenuItem  menuItem_UserModifyInf=new JMenuItem("个人信息修改/查看");
     private JMenuItem  menuItem_UserModifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AdminModifyPwd=new JMenuItem("密码修改");
@@ -30,6 +34,12 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_VipJoin=new JMenuItem("加入/续费会员");
     private JMenuItem  menuItem_VipInf=new JMenuItem("查看会员信息");
     private JMenuItem  menuItem_GoodsManage=new JMenuItem("商品信息管理");
+    private JMenuItem  menuItem_CouponManage=new JMenuItem("优惠券管理");
+    private JMenuItem  menuItem_PromotionManage=new JMenuItem("限时促销管理");
+    private JMenuItem  menuItem_DiscountManage=new JMenuItem("满折管理");
+    private JMenuItem  menuItem_PurchaseManage=new JMenuItem("采购商品");
+    private JMenuItem  menuItem_PurchaseOrderManage=new JMenuItem("采购订单状态更新");
+
 
     private FrmLogin dlgLogin = null;
     private JPanel statusBar = new JPanel();
@@ -80,13 +90,25 @@ public class FrmMain extends JFrame implements ActionListener{
             this.menu_AdminManage.add(this.menuItem_AdminAdd);
             this.menu_UserManage.add(this.menuItem_AdminManageUser);
             this.menu_GoodsManage.add(this.menuItem_GoodsManage);
+            this.menu_purchaseManage.add(this.menuItem_PurchaseManage);
+            this.menu_purchaseManage.add(this.menuItem_PurchaseOrderManage);
+            this.menu_couponManage.add(this.menuItem_CouponManage);
+            this.menu_couponManage.add(this.menuItem_PromotionManage);
+            this.menu_couponManage.add(this.menuItem_DiscountManage);
             this.menuItem_AdminModifyPwd.addActionListener(this);
             this.menuItem_AdminAdd.addActionListener(this);
             this.menuItem_AdminManageUser.addActionListener(this);
             this.menuItem_GoodsManage.addActionListener(this);
+            this.menuItem_PurchaseManage.addActionListener(this);
+            this.menuItem_PurchaseOrderManage.addActionListener(this);
+            this.menuItem_CouponManage.addActionListener(this);
+            this.menuItem_PromotionManage.addActionListener(this);
+            this.menuItem_DiscountManage.addActionListener(this);
             menubar.add(menu_GoodsManage);
             menubar.add(menu_UserManage);
             menubar.add(menu_AdminManage);
+            menubar.add(menu_couponManage);
+            menubar.add(menu_purchaseManage);
             this.setJMenuBar(menubar);
 
 
@@ -142,6 +164,20 @@ public class FrmMain extends JFrame implements ActionListener{
         else if (e.getSource() == this.menuItem_GoodsManage)
         {
             FrmAdminShowFresh dlg = new FrmAdminShowFresh(this,"商品信息",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_PurchaseManage)
+        {
+            try {
+                FrmPurchase dlg = new FrmPurchase(this,"商品采购",true, MainControl.purchaseTabManager.returnNextOderId(BeanAdmin.currentLoginAdmin));
+                dlg.setVisible(true);
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else if (e.getSource() == this.menuItem_PurchaseOrderManage)
+        {
+            FrmPurchaseOrderManage dlg = new FrmPurchaseOrderManage(this,"订单状态更新",true);
             dlg.setVisible(true);
         }
 }}
