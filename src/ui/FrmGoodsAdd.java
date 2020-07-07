@@ -50,7 +50,7 @@ public class FrmGoodsAdd extends JDialog implements ActionListener {
         workPane.add(labelDetail);
         workPane.add(edtDes);
         this.getContentPane().add(workPane, BorderLayout.CENTER);
-        this.setSize(300, 350);
+        this.setSize(300, 500);
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,

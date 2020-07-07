@@ -12,7 +12,7 @@ public class BeanGoods {
     private double spec;
     private String detail;
 
-    public static final String[] tableTitles={"序号","类别","名称","价格","规格","会员价","详情","数量"};
+    public static final String[] tableTitles={"序号","类别","名称","价格","会员价","数量","规格","详情"};
 
 
     public int getGoods_id() {
@@ -92,13 +92,13 @@ public class BeanGoods {
         else if (col==3)
             return Double.toString(this.getGoods_price());
         else if (col==4)
-            return Double.toString(this.getSpec());
-        else if (col==5)
             return Double.toString(this.getVip_price());
-        else if (col==6)
-            return this.getDetail();
-        else if (col==7)
+        else if (col==5)
             return Integer.toString(this.getGoods_number());
+        else if (col==6)
+            return Double.toString(this.getSpec());
+        else if (col==7)
+            return this.getDetail();
         else
             return "";
     }

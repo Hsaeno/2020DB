@@ -31,10 +31,10 @@ public class GoodsManager implements IGoodsManager {
                 bg.setCategory_id(rs.getInt(2));
                 bg.setGoods_name(rs.getString(3));
                 bg.setGoods_price(rs.getDouble(4));
-                bg.setSpec(rs.getDouble(5));
-                bg.setVip_price(rs.getDouble(6));
-                bg.setDetail(rs.getString(7));
-                bg.setGoods_number(rs.getInt(8));
+                bg.setVip_price(rs.getDouble(5));
+                bg.setGoods_number(rs.getInt(6));
+                bg.setSpec(rs.getDouble(7));
+                bg.setDetail(rs.getString(8));
                 result.add(bg);
             }
             return result;
@@ -124,7 +124,7 @@ public class GoodsManager implements IGoodsManager {
     }
 
     @Override
-    public void update(int goods_id,int catagory_id,String name,double price,double vip_price,int goods_number,double Spec,String detail) throws BaseException {
+    public void update(int goods_id,int catagory_id,String name,double price,double vip_price,int goods_number,double Spec,String detail,String oldName) throws BaseException {
         Connection conn = null;
         if ("".equals(name) || name == null)
         {
@@ -144,11 +144,11 @@ public class GoodsManager implements IGoodsManager {
         }
         try{
             conn = DBUtil.getConnection();
-            String sql = "select * from fresh where catagory_name = ?";
+            String sql = "select * from goods where goods_name = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1,name);
             java.sql.ResultSet rs = pst.executeQuery();
-            if (rs.next())
+            if (rs.next() && !name.equals(oldName))
             {
                 throw new BusinessException("该名称已存在,请更换");
             }

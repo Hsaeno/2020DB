@@ -27,11 +27,6 @@ public class FrmAdminManageUserWindow extends JDialog implements ActionListener 
                 (int) (height - this.getHeight()) / 2);
         this.validate();
         btnSeach.addActionListener(this);
-        this.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
     }
 
     @Override

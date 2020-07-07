@@ -205,8 +205,14 @@ public class FrmAdminShowFresh extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-
+            FrmGoodsModify dlg = new FrmGoodsModify(this,"商品修改",true,this.freshGoods.get(i));
+            dlg.setVisible(true);
+            int j=FrmAdminShowFresh.this.dataTableFresh.getSelectedRow();
+            if(j<0) {
+                return;
+            }
+            FrmAdminShowFresh.this.reloadGoodsTable(j);
+            reloadFreshTable();
         }
     }
 }
