@@ -25,3 +25,4 @@ out/production/2020DB/util/BaseException.class
 out/production/2020DB/util/BusinessException.class
 out/production/2020DB/util/DbException.class
 out/production/2020DB/util/DBUtil.class
+*.class
