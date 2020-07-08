@@ -15,4 +15,6 @@ public class MainControl {
     public static PromotionManager promotionManager = new PromotionManager();
     public static DiscountManager discountManager = new DiscountManager();
     public static DisConnGoodsManager disConnGoodsManager = new DisConnGoodsManager();
+    public static MenuManager menuManager = new MenuManager();
+    public static MenuRecManager menuRecManager = new MenuRecManager();
 }

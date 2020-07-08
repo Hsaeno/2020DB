@@ -26,6 +26,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenu menu_GoodsManage = new JMenu("关于商品");
     private JMenu menu_couponManage = new JMenu("优惠信息相关");
     private JMenu menu_purchaseManage = new JMenu("采购相关");
+    private JMenu menu_MenuManage = new JMenu("菜谱相关");
     private JMenuItem  menuItem_UserModifyInf=new JMenuItem("个人信息修改/查看");
     private JMenuItem  menuItem_UserModifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AdminModifyPwd=new JMenuItem("密码修改");
@@ -40,7 +41,8 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_DiscountGoodsManage=new JMenuItem("满折商品设置");
     private JMenuItem  menuItem_PurchaseManage=new JMenuItem("采购商品");
     private JMenuItem  menuItem_PurchaseOrderManage=new JMenuItem("采购订单状态更新");
-
+    private JMenuItem  menuItem_MenuInfManage=new JMenuItem("菜谱信息");
+    private JMenuItem  menuItem_MenuRecManage=new JMenuItem("菜谱推荐");
 
     private FrmLogin dlgLogin = null;
     private JPanel statusBar = new JPanel();
@@ -97,6 +99,10 @@ public class FrmMain extends JFrame implements ActionListener{
             this.menu_couponManage.add(this.menuItem_PromotionManage);
             this.menu_couponManage.add(this.menuItem_DiscountManage);
             this.menu_couponManage.add(this.menuItem_DiscountGoodsManage);
+            this.menu_MenuManage.add(this.menuItem_MenuInfManage);
+            this.menu_MenuManage.add(this.menuItem_MenuRecManage);
+            this.menuItem_MenuRecManage.addActionListener(this);
+            this.menuItem_MenuInfManage.addActionListener(this);
             this.menuItem_AdminModifyPwd.addActionListener(this);
             this.menuItem_AdminAdd.addActionListener(this);
             this.menuItem_AdminManageUser.addActionListener(this);
@@ -112,6 +118,7 @@ public class FrmMain extends JFrame implements ActionListener{
             menubar.add(menu_AdminManage);
             menubar.add(menu_couponManage);
             menubar.add(menu_purchaseManage);
+            menubar.add(menu_MenuManage);
             this.setJMenuBar(menubar);
 
 
@@ -201,6 +208,16 @@ public class FrmMain extends JFrame implements ActionListener{
         else if (e.getSource() == this.menuItem_DiscountGoodsManage)
         {
             FrmDiscountGoodsManage dlg = new FrmDiscountGoodsManage(this,"满折商品管理",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_MenuInfManage)
+        {
+            FrmMenuManage dlg = new FrmMenuManage(this,"菜谱管理",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_MenuRecManage)
+        {
+            FrmMenuRecManage dlg = new FrmMenuRecManage(this,"菜谱推荐管理",true);
             dlg.setVisible(true);
         }
 }}
