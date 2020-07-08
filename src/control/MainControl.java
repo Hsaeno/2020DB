@@ -13,4 +13,5 @@ public class MainControl {
     public static PurchaseTabManager purchaseTabManager = new PurchaseTabManager();
     public static CouponManager couponManager = new CouponManager();
     public static PromotionManager promotionManager = new PromotionManager();
+    public static DiscountManager discountManager = new DiscountManager();
 }

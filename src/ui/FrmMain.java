@@ -190,4 +190,9 @@ public class FrmMain extends JFrame implements ActionListener{
             FrmPromotionManage dlg = new FrmPromotionManage(this,"限时促销",true);
             dlg.setVisible(true);
         }
+        else if (e.getSource() == this.menuItem_DiscountManage)
+        {
+            FrmDiscountManage dlg = new FrmDiscountManage(this,"满折管理",true);
+            dlg.setVisible(true);
+        }
 }}
