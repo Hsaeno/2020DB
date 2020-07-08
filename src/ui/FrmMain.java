@@ -37,6 +37,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_CouponManage=new JMenuItem("优惠券管理");
     private JMenuItem  menuItem_PromotionManage=new JMenuItem("限时促销管理");
     private JMenuItem  menuItem_DiscountManage=new JMenuItem("满折管理");
+    private JMenuItem  menuItem_DiscountGoodsManage=new JMenuItem("满折商品设置");
     private JMenuItem  menuItem_PurchaseManage=new JMenuItem("采购商品");
     private JMenuItem  menuItem_PurchaseOrderManage=new JMenuItem("采购订单状态更新");
 
@@ -95,6 +96,7 @@ public class FrmMain extends JFrame implements ActionListener{
             this.menu_couponManage.add(this.menuItem_CouponManage);
             this.menu_couponManage.add(this.menuItem_PromotionManage);
             this.menu_couponManage.add(this.menuItem_DiscountManage);
+            this.menu_couponManage.add(this.menuItem_DiscountGoodsManage);
             this.menuItem_AdminModifyPwd.addActionListener(this);
             this.menuItem_AdminAdd.addActionListener(this);
             this.menuItem_AdminManageUser.addActionListener(this);
@@ -104,6 +106,7 @@ public class FrmMain extends JFrame implements ActionListener{
             this.menuItem_CouponManage.addActionListener(this);
             this.menuItem_PromotionManage.addActionListener(this);
             this.menuItem_DiscountManage.addActionListener(this);
+            this.menuItem_DiscountGoodsManage.addActionListener(this);
             menubar.add(menu_GoodsManage);
             menubar.add(menu_UserManage);
             menubar.add(menu_AdminManage);
@@ -193,6 +196,11 @@ public class FrmMain extends JFrame implements ActionListener{
         else if (e.getSource() == this.menuItem_DiscountManage)
         {
             FrmDiscountManage dlg = new FrmDiscountManage(this,"满折管理",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_DiscountGoodsManage)
+        {
+            FrmDiscountGoodsManage dlg = new FrmDiscountGoodsManage(this,"满折商品管理",true);
             dlg.setVisible(true);
         }
 }}
