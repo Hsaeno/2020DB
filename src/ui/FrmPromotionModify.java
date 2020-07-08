@@ -1,60 +1,51 @@
 package ui;
 
+import control.MainControl;
+import model.BeanCoupon;
+import model.BeanPromotion;
+import util.BaseException;
 
-
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.swing.*;
-
-import control.MainControl;
-import model.BeanCoupon;
-import model.BeanFresh;
-import model.BeanUsers;
-import util.BaseException;
-import util.DBUtil;
-
-public class FrmCouponModify extends JDialog implements ActionListener {
-
+public class FrmPromotionModify extends JDialog implements ActionListener {
     private JPanel toolBar = new JPanel();
     private JPanel workPane = new JPanel();
 
     private JButton btnOk = new JButton("修改");
     private JButton btnCancel = new JButton("取消");
-    private JLabel labelId = new JLabel("优惠券号：");
-    private JLabel labelContent = new JLabel("优惠内容：");
-    private JLabel labelLeastMoney= new JLabel("最低金额：");
-    private JLabel labelSubMoney = new JLabel("减免金额：");
+    private JLabel labelId = new JLabel("促销序号：");
+    private JLabel labelGoodsName = new JLabel("促销商品：");
+    private JLabel labelPromotionMoney= new JLabel("促销金额：");
+    private JLabel labelPromotionNumber = new JLabel("促销数量：");
     private JLabel labelBeginTime = new JLabel("开始时间：");
     private JLabel labelEndTime = new JLabel("结束时间：");
     private JTextField edtId= new JTextField(25);
-    private JTextField edtContent = new JTextField(25);
-    private JTextField edtLeastMoney = new JTextField(25);
-    private JTextField edtSubMoney = new JTextField(25);
+    private JTextField edtGoodsName = new JTextField(25);
+    private JTextField edtPromotionMoney = new JTextField(25);
+    private JTextField edtPromotionNumber = new JTextField(25);
     private JTextField edtBeginTime = new JTextField(25);
     private JTextField edtEndTime = new JTextField(25);
-
-    public FrmCouponModify(FrmCouponManage f, String s, boolean b, BeanCoupon bc)
+    public int id;
+    public FrmPromotionModify(FrmPromotionManage f, String s, boolean b, BeanPromotion bp)
     {
         super(f,s,b);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String id = Integer.toString(bc.getCoupon_id());
-        String content = bc.getCoupon_content();
-        String leastMoney = Double.toString(bc.getLeast_money());
-        String subMoney = Double.toString(bc.getSub_money());
-        String beginTime = sdf.format(bc.getCp_beginTime());
-        String endTime = sdf.format(bc.getCp_endTime());
-        edtId.setText(id);
+        id = bp.getPromotion_id();
+        String goodsName = bp.getGoods_name();
+        String PromotionMoney = Double.toString(bp.getPromotion_price());
+        String PromotionNumber = Integer.toString(bp.getPromotion_number());
+        String beginTime = sdf.format(bp.getPromotion_beginTime());
+        String endTime = sdf.format(bp.getPromotion_endTime());
+        edtId.setText(Integer.toString(bp.getPromotion_id()));
         edtId.setEditable(false);
-        edtContent.setText(content);
-        edtLeastMoney.setText(leastMoney);
-        edtSubMoney.setText(subMoney);
+        edtGoodsName.setText(goodsName);
+        edtPromotionMoney.setText(PromotionMoney);
+        edtPromotionNumber.setText(PromotionNumber);
         edtBeginTime.setText(beginTime);
         edtEndTime.setText(endTime);
         toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -63,12 +54,12 @@ public class FrmCouponModify extends JDialog implements ActionListener {
         this.getContentPane().add(toolBar, BorderLayout.SOUTH);
         workPane.add(labelId);
         workPane.add(edtId);
-        workPane.add(labelContent);
-        workPane.add(edtContent);
-        workPane.add(labelLeastMoney);
-        workPane.add(edtLeastMoney);
-        workPane.add(labelSubMoney);
-        workPane.add(edtSubMoney);
+        workPane.add(labelGoodsName);
+        workPane.add(edtGoodsName);
+        workPane.add(labelPromotionMoney);
+        workPane.add(edtPromotionMoney);
+        workPane.add(labelPromotionNumber);
+        workPane.add(edtPromotionNumber);
         workPane.add(labelBeginTime);
         workPane.add(edtBeginTime);
         workPane.add(labelEndTime);
@@ -90,15 +81,15 @@ public class FrmCouponModify extends JDialog implements ActionListener {
             this.setVisible(false);
         else if(e.getSource()==this.btnOk)
         {
-            String content = edtContent.getText();
+            String goodsName = edtGoodsName.getText();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Double leastMoney;
-            Double subMoney;
+            double promotionMoney;
+            int promotionNumber;
             Date beginTime;
             Date endTime;
             try{
-                leastMoney = Double.parseDouble(edtLeastMoney.getText());
-                subMoney = Double.parseDouble(edtSubMoney.getText());
+                promotionMoney = Double.parseDouble(edtPromotionMoney.getText());
+                promotionNumber = Integer.parseInt(edtPromotionNumber.getText());
                 beginTime = sdf.parse(edtBeginTime.getText());
                 endTime =sdf.parse(edtEndTime.getText());
             }
@@ -108,7 +99,7 @@ public class FrmCouponModify extends JDialog implements ActionListener {
                 return;
             }
             try {
-                MainControl.couponManager.modify(Integer.parseInt(edtId.getText()),edtContent.getText(),leastMoney,subMoney,beginTime,endTime);
+                MainControl.promotionManager.modify(id,goodsName,promotionMoney,promotionNumber,beginTime,endTime);
                 JOptionPane.showMessageDialog(null,  "修改成功","提示",JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);
             } catch (BaseException e1) {

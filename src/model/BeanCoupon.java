@@ -6,7 +6,7 @@ import java.util.Date;
 public class BeanCoupon {
     private int coupon_id;
     private String coupon_content;
-    private double least_monet;
+    private double least_money;
     private double sub_money;
     private Date cp_beginTime;
     private Date cp_endTime;
@@ -30,12 +30,12 @@ public class BeanCoupon {
         this.coupon_content = coupon_content;
     }
 
-    public double getLeast_monet() {
-        return least_monet;
+    public double getLeast_money() {
+        return least_money;
     }
 
-    public void setLeast_monet(double least_monet) {
-        this.least_monet = least_monet;
+    public void setLeast_money(double least_monet) {
+        this.least_money = least_monet;
     }
 
     public double getSub_money() {
@@ -71,7 +71,7 @@ public class BeanCoupon {
         else if (col==1)
             return this.getCoupon_content();
         else if (col==2)
-            return Double.toString(this.getLeast_monet());
+            return Double.toString(this.getLeast_money());
         else if (col==3)
             return Double.toString(this.getSub_money());
         else if (col==4)

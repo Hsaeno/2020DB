@@ -73,6 +73,10 @@ public class GoodsManager implements IGoodsManager {
         {
             throw new BusinessException("请输入正确的数量");
         }
+        if (vip_price > price)
+        {
+            throw new BusinessException("会员价不得高于正常价格");
+        }
         try{
             conn = DBUtil.getConnection();
             String sql = "select * from goods where goods_name = ?";

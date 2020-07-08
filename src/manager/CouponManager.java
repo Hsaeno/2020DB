@@ -30,7 +30,7 @@ public class CouponManager implements ICouponManager {
                 BeanCoupon bf = new BeanCoupon();
                 bf.setCoupon_id(rs.getInt(1));
                 bf.setCoupon_content(rs.getString(2));
-                bf.setLeast_monet(rs.getDouble(3));
+                bf.setLeast_money(rs.getDouble(3));
                 bf.setSub_money(rs.getDouble(4));
                 bf.setCp_beginTime(rs.getTimestamp(5));
                 bf.setCp_endTime(rs.getTimestamp(6));
@@ -62,7 +62,7 @@ public class CouponManager implements ICouponManager {
             conn = DBUtil.getConnection();
             if (beginTime.getTime() > endTime.getTime())
             {
-                throw new BusinessException("开始时间不能早于结束时间");
+                throw new BusinessException("结束时间不能早于开始时间");
             }
             if (sub_money > least_money)
             {
@@ -177,7 +177,7 @@ public class CouponManager implements ICouponManager {
             BeanCoupon bc = new BeanCoupon();
             bc.setCoupon_id(rs.getInt(1));
             bc.setCoupon_content(rs.getString(2));
-            bc.setLeast_monet(rs.getDouble(3));
+            bc.setLeast_money(rs.getDouble(3));
             bc.setSub_money(rs.getDouble(4));
             bc.setCp_beginTime(rs.getTimestamp(5));
             bc.setCp_endTime(rs.getTimestamp(6));
