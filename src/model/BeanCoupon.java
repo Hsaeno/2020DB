@@ -11,7 +11,7 @@ public class BeanCoupon {
     private Date cp_beginTime;
     private Date cp_endTime;
 
-    public static final String[] tableTitles={"序号","内存","最低金额","减免金额","开始时间","结束时间"};
+    public static final String[] tableTitles={"序号","内容","最低金额","减免金额","开始时间","结束时间"};
 
     public int getCoupon_id() {
         return coupon_id;

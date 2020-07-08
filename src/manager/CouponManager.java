@@ -136,7 +136,7 @@ public class CouponManager implements ICouponManager {
             {
                 throw new BusinessException("优惠券不存在");
             }
-            sql = "update coupon set coupon_content = ?,leat_money = ?, sub_money = ?, cp_beginTime = ?,cp_endTime = ? where coupon_id = ?";
+            sql = "update coupon set coupon_content = ?,least_money = ?, sub_money = ?, cp_beginTime = ?,cp_endTime = ? where coupon_id = ?";
             pst = conn.prepareStatement(sql);
             pst.setString(1,content);
             pst.setDouble(2,least_money);
@@ -158,7 +158,6 @@ public class CouponManager implements ICouponManager {
                     e.printStackTrace();
                 }
         }
-
 
     }
 

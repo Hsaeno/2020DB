@@ -92,5 +92,34 @@ public class FrmCouponManage  extends JDialog implements ActionListener {
             dlg.setVisible(true);
             this.reloadTable();
         }
+        else if (e.getSource() == this.btnDelete)
+        {
+            int i = FrmCouponManage.this.dataTableCoupon.getSelectedRow();
+            if (i < 0)
+            {
+                JOptionPane.showMessageDialog(null, "请选择优惠券", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                MainControl.couponManager.delete(allCoupon.get(i).getCoupon_id());
+                this.reloadTable();
+            }
+            catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        else if (e.getSource() == this.btnModify)
+        {
+            int i = FrmCouponManage.this.dataTableCoupon.getSelectedRow();
+            if (i < 0)
+            {
+                JOptionPane.showMessageDialog(null, "请选择优惠券", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            FrmCouponModify dlg = new FrmCouponModify(this,"优惠券添加",true,allCoupon.get(i));
+            dlg.setVisible(true);
+            this.reloadTable();
+        }
     }
 }
