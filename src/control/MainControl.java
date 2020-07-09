@@ -17,4 +17,5 @@ public class MainControl {
     public static DisConnGoodsManager disConnGoodsManager = new DisConnGoodsManager();
     public static MenuManager menuManager = new MenuManager();
     public static MenuRecManager menuRecManager = new MenuRecManager();
+    public static AddressManager addressManager = new AddressManager();
 }

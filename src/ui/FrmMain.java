@@ -43,6 +43,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_PurchaseOrderManage=new JMenuItem("采购订单状态更新");
     private JMenuItem  menuItem_MenuInfManage=new JMenuItem("菜谱信息");
     private JMenuItem  menuItem_MenuRecManage=new JMenuItem("菜谱推荐");
+    private JMenuItem  menuItem_AddressManage=new JMenuItem("地址管理");
 
     private FrmLogin dlgLogin = null;
     private JPanel statusBar = new JPanel();
@@ -56,9 +57,11 @@ public class FrmMain extends JFrame implements ActionListener{
         if (FrmLogin.flag == 1 )
         {
             this.menu_PersonalManage.add(this.menuItem_UserModifyPwd);
+            this.menu_PersonalManage.add(this.menuItem_AddressManage);
             this.menu_PersonalManage.add(this.menuItem_UserModifyInf);
             this.menuItem_UserModifyPwd.addActionListener(this);
             this.menuItem_UserModifyInf.addActionListener(this);
+            this.menuItem_AddressManage.addActionListener(this);
             this.menu_VipManage.add(this.menuItem_VipJoin);
             this.menu_VipManage.add(this.menuItem_VipInf);
             this.menuItem_VipJoin.addActionListener(this);
@@ -218,6 +221,11 @@ public class FrmMain extends JFrame implements ActionListener{
         else if (e.getSource() == this.menuItem_MenuRecManage)
         {
             FrmMenuRecManage dlg = new FrmMenuRecManage(this,"菜谱推荐管理",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_AddressManage)
+        {
+            FrmAddressManage dlg = new FrmAddressManage(this,"地址管理",true);
             dlg.setVisible(true);
         }
 }}
