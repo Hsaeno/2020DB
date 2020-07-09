@@ -206,4 +206,43 @@ public class GoodsManager implements IGoodsManager {
                 }
         }
     }
+
+    @Override
+    public List<BeanGoods> loadAllRemain(int catagory_id) throws BaseException {
+        Connection conn = null;
+        List<BeanGoods> result=new ArrayList<BeanGoods>();
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from goods  where catagory_id = ? and goods_number > 0 order by goods_id ";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1,catagory_id);
+            java.sql.ResultSet rs = pst.executeQuery();
+            while(rs.next())
+            {
+                BeanGoods bg = new BeanGoods();
+                bg.setGoods_id(rs.getInt(1));
+                bg.setCategory_id(rs.getInt(2));
+                bg.setGoods_name(rs.getString(3));
+                bg.setGoods_price(rs.getDouble(4));
+                bg.setVip_price(rs.getDouble(5));
+                bg.setGoods_number(rs.getInt(6));
+                bg.setSpec(rs.getDouble(7));
+                bg.setDetail(rs.getString(8));
+                result.add(bg);
+            }
+            return result;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
 }

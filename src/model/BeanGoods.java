@@ -12,7 +12,8 @@ public class BeanGoods {
     private double spec;
     private String detail;
 
-    public static final String[] tableTitles={"序号","类别","名称","价格","会员价","数量","规格","详情"};
+    public static final String[] tableTitles = {"序号","类别","名称","价格","会员价","数量","规格","详情"};
+    public static final String[] tableTitles2 = {"名称","价格","会员价","规格","详情"};
 
 
     public int getGoods_id() {
@@ -98,6 +99,22 @@ public class BeanGoods {
         else if (col==6)
             return Double.toString(this.getSpec());
         else if (col==7)
+            return this.getDetail();
+        else
+            return "";
+    }
+
+    public String getCell2(int col)
+    {
+        if(col==0)
+            return this.getGoods_name();
+        else if (col==1)
+            return Double.toString(this.getGoods_price());
+        else if (col==2)
+            return Double.toString(this.getVip_price());
+        else if (col==3)
+            return Double.toString(this.getSpec());
+        else if (col==4)
             return this.getDetail();
         else
             return "";

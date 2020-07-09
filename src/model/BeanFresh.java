@@ -7,6 +7,7 @@ public class BeanFresh {
     private String category_name;
     private String description;
     public static final String[] tableTitles={"序号","名称","描述"};
+    public static final String[] tableTitles2={"名称","描述"};
     public int getCategory_id() {
         return category_id;
     }
@@ -38,6 +39,16 @@ public class BeanFresh {
         else if (col==1)
             return this.getCategory_name();
         else if (col==2)
+            return this.getDescription();
+        else
+            return "";
+    }
+
+    public String getCell2(int col)
+    {
+        if (col==0)
+            return this.getCategory_name();
+        else if (col==1)
             return this.getDescription();
         else
             return "";

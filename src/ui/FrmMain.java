@@ -1,23 +1,28 @@
 package ui;
 import control.MainControl;
-import model.BeanAdmin;
-import model.BeanUsers;
+import model.*;
 import util.BaseException;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.util.List;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 
 public class FrmMain extends JFrame implements ActionListener{
 
     private static final long serialVersionUID = 1L;
+
+    private JButton btnMakeOrder = new JButton("下单");
+    private JButton btnAdd = new JButton("添加");
+    private JButton btnModify = new JButton("修改");
+    private JButton btnDelete = new JButton("删除");
+    private JButton btnCancel = new JButton("清空");
+
     private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_PersonalManage=new JMenu("个人信息管理");
     private JMenu menu_AdminManage=new JMenu("管理员信息管理");
@@ -48,6 +53,86 @@ public class FrmMain extends JFrame implements ActionListener{
     private FrmLogin dlgLogin = null;
     private JPanel statusBar = new JPanel();
 
+    private Object tblFreshTitle[]= BeanFresh.tableTitles2;
+    private Object tblFreshData[][];
+    DefaultTableModel tabFreshModel=new DefaultTableModel();
+    private JTable dataTableFresh=new JTable(tabFreshModel);
+
+
+    private Object tblGoodsTitle[]= BeanGoods.tableTitles2;
+    private Object tblGoodsData[][];
+    DefaultTableModel tabGoodsModel=new DefaultTableModel();
+    private JTable dataTableGoods=new JTable(tabGoodsModel);
+
+    private Object tblCartTitle[]= BeanCart.tableTitles;
+    private Object tblCartData[][];
+    DefaultTableModel tabCartModel=new DefaultTableModel();
+    private JTable dataTableCart=new JTable(tabCartModel);
+
+    private JPanel toolBar = new JPanel();
+
+    private BeanFresh curFresh = null;
+
+    List<BeanFresh> allFresh = null;
+    List<BeanGoods> freshGoods = null;
+    List<BeanCart> allCart = null;
+
+    private void reloadFreshTable(){
+        try {
+            allFresh= MainControl.freshManager.loadAll();
+        } catch (BaseException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        tblFreshData =  new Object[allFresh.size()][BeanFresh.tableTitles2.length];
+        for(int i=0;i<allFresh.size();i++){
+            for(int j=0;j<BeanFresh.tableTitles2.length;j++)
+                tblFreshData[i][j]=allFresh.get(i).getCell2(j);
+        }
+        tabFreshModel.setDataVector(tblFreshData,tblFreshTitle);
+        this.dataTableFresh.validate();
+        this.dataTableFresh.repaint();
+    }
+
+    private void reloadGoodsTable(int FreshIdx)
+    {
+        if (FreshIdx < 0 )
+            return;
+        curFresh = allFresh.get(FreshIdx);
+        try{
+            freshGoods = MainControl.goodsManager.loadAllRemain(curFresh.getCategory_id());
+        } catch (BaseException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        tblGoodsData = new Object[freshGoods.size()][BeanGoods.tableTitles2.length];
+        for (int i=0;i<freshGoods.size();i++)
+            for (int j =0;j<BeanGoods.tableTitles2.length;j++)
+            {
+                tblGoodsData[i][j] = freshGoods.get(i).getCell2(j);
+            }
+        tabGoodsModel.setDataVector(tblGoodsData,tblGoodsTitle);
+        this.dataTableGoods.validate();
+        this.dataTableGoods.repaint();
+    }
+
+    private void reloadCartTable(){
+        try {
+            allCart = MainControl.cartManager.loadAll(BeanUsers.currentLoginUser.getUser_id());
+        } catch (BaseException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        tblCartData =  new Object[allCart.size()][BeanCart.tableTitles.length];
+        for(int i=0;i<allCart.size();i++){
+            for(int j=0;j<BeanCart.tableTitles.length;j++)
+                tblCartData[i][j]=allCart.get(i).getCell(j);
+        }
+        tabCartModel.setDataVector(tblCartData,tblCartTitle);
+        this.dataTableCart.validate();
+        this.dataTableCart.repaint();
+    }
+
     public FrmMain()
     {
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -56,6 +141,7 @@ public class FrmMain extends JFrame implements ActionListener{
         dlgLogin.setVisible(true);
         if (FrmLogin.flag == 1 )
         {
+            this.getContentPane().add(new JScrollPane(this.dataTableFresh), BorderLayout.WEST);
             this.menu_PersonalManage.add(this.menuItem_UserModifyPwd);
             this.menu_PersonalManage.add(this.menuItem_AddressManage);
             this.menu_PersonalManage.add(this.menuItem_UserModifyInf);
@@ -69,7 +155,20 @@ public class FrmMain extends JFrame implements ActionListener{
             menubar.add(menu_PersonalManage);
             menubar.add(menu_VipManage);
             this.setJMenuBar(menubar);
+            this.dataTableFresh.addMouseListener(new MouseAdapter(){
+                public void mouseClicked(MouseEvent e)
+                {
+                    int i = FrmMain.this.dataTableFresh.getSelectedRow();
+                    if (i<0){
+                        return;
+                    }
+                    FrmMain.this.reloadGoodsTable(i);
+                }
 
+            });
+            this.getContentPane().add(new JScrollPane(this.dataTableGoods), BorderLayout.CENTER);
+            this.reloadFreshTable();
+            this.setExtendedState(MAXIMIZED_BOTH);
             statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 
             if (!BeanUsers.currentLoginUser.getVip())
@@ -81,13 +180,27 @@ public class FrmMain extends JFrame implements ActionListener{
                 JLabel label=new JLabel("您好! 尊敬的会员:"+ BeanUsers.currentLoginUser.getUser_name());
                 statusBar.add(label);
             }
+            toolBar.setLayout(new FlowLayout(FlowLayout.CENTER));
+            toolBar.add(btnAdd);
+            toolBar.add(btnModify);
+            toolBar.add(btnDelete);
+            toolBar.add(btnMakeOrder);
+            toolBar.add(btnCancel);
+            this.getContentPane().add(toolBar,BorderLayout.NORTH);
             this.getContentPane().add(statusBar,BorderLayout.SOUTH);
+            this.getContentPane().add(new JScrollPane(this.dataTableCart), BorderLayout.EAST);
+            this.reloadCartTable();
             this.addWindowListener(new WindowAdapter(){
                 public void windowClosing(WindowEvent e){
                     System.exit(0);
                 }
             });
             this.setVisible(true);
+            this.btnAdd.addActionListener(this);
+            this.btnCancel.addActionListener(this);
+            this.btnDelete.addActionListener(this);
+            this.btnModify.addActionListener(this);
+            this.btnMakeOrder.addActionListener(this);
         }
         else if(FrmLogin.flag == 0)
         {
@@ -227,5 +340,55 @@ public class FrmMain extends JFrame implements ActionListener{
         {
             FrmAddressManage dlg = new FrmAddressManage(this,"地址管理",true);
             dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.btnAdd)
+        {
+            int i = FrmMain.this.dataTableGoods.getSelectedRow();
+            if (i < 0)
+            {
+                JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            FrmCartGoodsAdd dlg = new FrmCartGoodsAdd(this,"商品数量填写",true,freshGoods.get(i));
+            dlg.setVisible(true);
+            this.reloadCartTable();
+        }
+        else if (e.getSource() == this.btnCancel)
+        {
+            try {
+                MainControl.cartManager.deleteAll(BeanUsers.currentLoginUser.getUser_id());
+                this.reloadCartTable();
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        else if (e.getSource() == this.btnDelete)
+        {
+            int i = FrmMain.this.dataTableCart.getSelectedRow();
+            if (i < 0)
+            {
+                JOptionPane.showMessageDialog(null, "请选择购物车内的商品", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                MainControl.cartManager.delete(allCart.get(i).getCartNumber());
+                this.reloadCartTable();
+            } catch (BaseException e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        else if (e.getSource() == this.btnModify)
+        {
+            int i = FrmMain.this.dataTableCart.getSelectedRow();
+            if (i < 0)
+            {
+                JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            FrmCartGoodsModify dlg = new  FrmCartGoodsModify(this,"商品数量修改",true,allCart.get(i));
+            dlg.setVisible(true);
+            this.reloadCartTable();
         }
 }}
