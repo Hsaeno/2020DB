@@ -34,7 +34,7 @@ public class CouponManager implements ICouponManager {
                 bf.setSub_money(rs.getDouble(4));
                 bf.setCp_beginTime(rs.getTimestamp(5));
                 bf.setCp_endTime(rs.getTimestamp(6));
-                if (bf.getCp_endTime().getTime()>System.currentTimeMillis())
+                if ((bf.getCp_endTime().getTime()>System.currentTimeMillis() )&& (bf.getCp_beginTime().getTime()<System.currentTimeMillis()))
                 {
                     result.add(bf);
                 }
@@ -162,17 +162,17 @@ public class CouponManager implements ICouponManager {
     }
 
     @Override
-    public BeanCoupon seacrch(int id) throws BaseException {
+    public BeanCoupon loadByPrice(int price) throws BaseException {
         Connection conn = null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "select * from coupon where coupon_id = ?";
+            String sql = "select * from coupon where least<?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setInt(1,id);
+            pst.setInt(1,price);
             java.sql.ResultSet rs = pst.executeQuery();
             if (!rs.next())
             {
-                throw new BusinessException("优惠券不存在");
+                return null;
             }
             BeanCoupon bc = new BeanCoupon();
             bc.setCoupon_id(rs.getInt(1));

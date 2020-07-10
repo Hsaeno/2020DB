@@ -9,6 +9,35 @@ public class BeanCart {
     String user_id;
     double goods_price;
     double goods_vip_price;
+    double goods_promotion_price;
+
+    int dis_inf_id;
+    double discount = 1.0;
+
+    public int getDis_inf_id() {
+        return dis_inf_id;
+    }
+
+    public void setDis_inf_id(int dis_inf_id) {
+        this.dis_inf_id = dis_inf_id;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+
+    public double getGoods_promotion_price() {
+        return goods_promotion_price;
+    }
+
+    public void setGoods_promotion_price(double goods_promotion_price) {
+        this.goods_promotion_price = goods_promotion_price;
+    }
 
     public double getGoods_vip_price() {
         return goods_vip_price;
@@ -27,7 +56,7 @@ public class BeanCart {
     }
 
     int cartNumber;
-    public static final String[] tableTitles={"商品名称","商品数量","商品单价","会员价"};
+    public static final String[] tableTitles={"商品名称","商品数量","商品单价","会员价","促销价","折扣"};
 
     public String getGoodsName() {
         return goodsName;
@@ -79,6 +108,10 @@ public class BeanCart {
             return Double.toString(this.getGoods_price());
         else if (col==3)
             return Double.toString(this.getGoods_vip_price());
+        else if (col==4)
+            return Double.toString(this.getGoods_promotion_price());
+        else if (col==5)
+            return Double.toString(this.getDiscount());
         else
             return "";
     }

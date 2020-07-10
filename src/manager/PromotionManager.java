@@ -91,6 +91,16 @@ public class PromotionManager implements IPromotionManager {
             {
                 throw new BusinessException("促销数量不得大于商品库存");
             }
+            sql = "select promotion_endTime from promotion where promotion_endTime = ?";
+            pst =conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            if (rs.last())
+            {
+                if (rs.getTimestamp(1).getTime() > beginTime.getTime())
+                {
+                    throw new BusinessException("同一件商品在相同时间内不得进行两次促销");
+                }
+            }
             sql = "insert into promotion(goods_id,promotion_price,promotion_number,promotion_beginTime,promotion_endTime) values (?,?,?,?,?)";
             pst = conn.prepareStatement(sql);
             pst.setInt(1,goods_id);

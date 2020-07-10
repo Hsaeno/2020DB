@@ -228,6 +228,37 @@ public class GoodsManager implements IGoodsManager {
                 bg.setGoods_number(rs.getInt(6));
                 bg.setSpec(rs.getDouble(7));
                 bg.setDetail(rs.getString(8));
+                String sql2 = "select promotion_price,promotion_number,promotion_beginTime,promotion_endTime from promotion where goods_id = ? ";
+                java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,rs.getInt(1));
+                java.sql.ResultSet rs2 = pst2.executeQuery();
+                bg.setPromotionPrice(bg.getGoods_price());
+                while (rs2.next())
+                {
+                    if (rs2.getInt(2) > 0 && rs2.getTimestamp(3).getTime() < System.currentTimeMillis() && rs2.getTimestamp(4).getTime() > System.currentTimeMillis())
+                    {
+                        bg.setPromotionPrice(rs2.getDouble(1));
+                        break;
+                    }
+                }
+                sql2 = "select a.dis_inf_id,a.dis_inf_content,a.dis_beginTime,a.dis_endTime,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
+                pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,rs.getInt(1));
+                rs2 = pst2.executeQuery();
+                bg.setDiscount(1.0);
+                bg.setDiscountContent("无");
+                bg.setDiscount_least_number(1);
+                while (rs2.next())
+                {
+                    if (rs2.getTimestamp(3).getTime()<System.currentTimeMillis() && rs2.getTimestamp(4).getTime() > System.currentTimeMillis())
+                    {
+                        bg.setDiscountId(rs2.getInt(1));
+                        bg.setDiscountContent(rs2.getString(2));
+                        bg.setDiscount_least_number(rs2.getInt(5));
+                        bg.setDiscount(rs2.getDouble(6));
+                    break;
+                    }
+                }
                 result.add(bg);
             }
             return result;

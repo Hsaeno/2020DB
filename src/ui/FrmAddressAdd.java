@@ -63,6 +63,7 @@ public class FrmAddressAdd extends JDialog implements ActionListener {
                         edtCity.removeAllItems();
                         for (int i = 0;i<city1.length;i++)
                             edtCity.addItem(city1[i]);
+
                     }
                     if (e.getItem().equals("北京")){
                         edtCity.removeAllItems();

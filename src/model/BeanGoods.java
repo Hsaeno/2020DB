@@ -11,9 +11,56 @@ public class BeanGoods {
     private int goods_number;
     private double spec;
     private String detail;
+    private double promotionPrice;
+
+    private String discountContent;
+    private int discountId;
+    private double discount;
+    private int discount_least_number;
+
+    public int getDiscount_least_number() {
+        return discount_least_number;
+    }
+
+    public void setDiscount_least_number(int discount_least_number) {
+        this.discount_least_number = discount_least_number;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public String getDiscountContent() {
+        return discountContent;
+    }
+
+    public void setDiscountContent(String discountContent) {
+        this.discountContent = discountContent;
+    }
+
+    public int getDiscountId() {
+        return discountId;
+    }
+
+    public void setDiscountId(int discountId) {
+        this.discountId = discountId;
+    }
+
+
+    public double getPromotionPrice() {
+        return promotionPrice;
+    }
+
+    public void setPromotionPrice(double promotionPrice) {
+        this.promotionPrice = promotionPrice;
+    }
 
     public static final String[] tableTitles = {"序号","类别","名称","价格","会员价","数量","规格","详情"};
-    public static final String[] tableTitles2 = {"名称","价格","会员价","规格","详情"};
+    public static final String[] tableTitles2 = {"名称","价格","会员价","折扣价","满折情况","规格","详情"};
 
 
     public int getGoods_id() {
@@ -113,8 +160,15 @@ public class BeanGoods {
         else if (col==2)
             return Double.toString(this.getVip_price());
         else if (col==3)
+            if (this.getPromotionPrice() == this.getGoods_price())
+                return "无";
+            else
+                return Double.toString(this.getPromotionPrice());
+        else if(col==4)
+            return this.getDiscountContent();
+        else if (col==5)
             return Double.toString(this.getSpec());
-        else if (col==4)
+        else if (col==6)
             return this.getDetail();
         else
             return "";

@@ -391,4 +391,27 @@ public class FrmMain extends JFrame implements ActionListener{
             dlg.setVisible(true);
             this.reloadCartTable();
         }
+        else if (e.getSource() == this.btnMakeOrder)
+        {
+            List<BeanCoupon> allCoupon = null;
+            List<BeanAddress> allAddress = null;
+            try {
+                allCoupon = MainControl.couponManager.loadAll();
+                allAddress = MainControl.addressManager.loadUserAddress(BeanUsers.currentLoginUser);
+            } catch (BaseException ex) {
+                ex.printStackTrace();
+            }
+            FrmOrder dlg = null;
+            try {
+                if (allCart.size()==0)
+                {   JOptionPane.showMessageDialog(null, "请先选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                dlg = new FrmOrder(this,"下单",true,allAddress,allCoupon);
+            } catch (BaseException ex) {
+                ex.printStackTrace();
+            }
+            dlg.setVisible(true);
+            this.reloadCartTable();
+        }
 }}
