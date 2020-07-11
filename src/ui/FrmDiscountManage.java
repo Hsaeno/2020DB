@@ -31,7 +31,7 @@ public class FrmDiscountManage  extends JDialog implements ActionListener {
 
     private void reloadTable(){
         try {
-            allDiscount = MainControl.discountManager.loadAll();
+            allDiscount = MainControl.discountManager.AdminLoadAll();
         } catch (BaseException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
             return;

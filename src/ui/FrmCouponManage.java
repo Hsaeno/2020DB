@@ -34,7 +34,7 @@ public class FrmCouponManage  extends JDialog implements ActionListener {
 
     private void reloadTable(){
         try {
-            allCoupon = MainControl.couponManager.loadAll();
+            allCoupon = MainControl.couponManager.AdminLoadAll();
         } catch (BaseException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
             return;
