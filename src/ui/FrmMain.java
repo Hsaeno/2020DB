@@ -32,8 +32,8 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenu menu_couponManage = new JMenu("优惠信息相关");
     private JMenu menu_purchaseManage = new JMenu("采购相关");
     private JMenu menu_MenuManage = new JMenu("菜谱相关");
-
     private JMenu menu_OrderManage = new JMenu("订单管理");
+    private JMenu menu_couponShow = new JMenu("优惠信息");
 
     private JMenu menu_PurchaseHistoryManage = new JMenu("个人消费情况");
     private JMenuItem  menuItem_UserModifyInf=new JMenuItem("个人信息修改/查看");
@@ -54,6 +54,10 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_MenuRecManage=new JMenuItem("菜谱推荐");
     private JMenuItem  menuItem_AddressManage=new JMenuItem("地址管理");
     private JMenuItem  menuItem_PurchaseHistoryManage = new JMenuItem("个人消费查看");
+
+    private JMenuItem  menuItem_CouponShow =new JMenuItem("优惠券信息");
+    private JMenuItem  menuItem_DiscountShow =new JMenuItem("满折信息");
+    private JMenuItem  menuItem_PromotionShow =new JMenuItem("限时促销信息");
 
     private JMenuItem  menuItem_OrderManage = new JMenuItem("订单配送");
 
@@ -161,9 +165,16 @@ public class FrmMain extends JFrame implements ActionListener{
             this.menuItem_VipInf.addActionListener(this);
             this.menu_PurchaseHistoryManage.add(this.menuItem_PurchaseHistoryManage);
             this.menuItem_PurchaseHistoryManage.addActionListener(this);
+            this.menu_couponShow.add(this.menuItem_DiscountShow);
+            this.menu_couponShow.add(this.menuItem_CouponShow);
+            this.menu_couponShow.add(this.menuItem_PromotionShow);
+            this.menuItem_CouponShow.addActionListener(this);
+            this.menuItem_DiscountShow.addActionListener(this);
+            this.menuItem_PromotionShow.addActionListener(this);
             menubar.add(menu_PersonalManage);
             menubar.add(menu_VipManage);
             menubar.add(menu_PurchaseHistoryManage);
+            menubar.add(menu_couponShow);
             this.setJMenuBar(menubar);
             this.dataTableFresh.addMouseListener(new MouseAdapter(){
                 public void mouseClicked(MouseEvent e)
@@ -435,6 +446,21 @@ public class FrmMain extends JFrame implements ActionListener{
         else if (e.getSource() == this.menuItem_OrderManage)
         {
             FrmAdminManageOrder dlg = new FrmAdminManageOrder(this,"订单更新",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_CouponShow)
+        {
+            FrmCouponShow dlg = new FrmCouponShow(this,"优惠券信息",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_PromotionShow)
+        {
+            FrmPromotionShow dlg = new FrmPromotionShow(this,"促销信息",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_DiscountShow)
+        {
+            FrmDiscountShow dlg = new FrmDiscountShow(this,"满折信息",true);
             dlg.setVisible(true);
         }
 }}

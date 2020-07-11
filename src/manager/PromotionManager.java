@@ -41,7 +41,7 @@ public class PromotionManager implements IPromotionManager {
                 bp.setPromotion_number(rs.getInt(4));
                 bp.setPromotion_beginTime(rs.getTimestamp(5));
                 bp.setPromotion_endTime(rs.getTimestamp(6));
-                if (bp.getPromotion_endTime().getTime()>System.currentTimeMillis())
+                if ((bp.getPromotion_endTime().getTime()>System.currentTimeMillis() )&& (bp.getPromotion_beginTime().getTime()<System.currentTimeMillis()))
                 {
                     result.add(bp);
                 }
@@ -91,10 +91,11 @@ public class PromotionManager implements IPromotionManager {
             {
                 throw new BusinessException("促销数量不得大于商品库存");
             }
-            sql = "select promotion_endTime from promotion where promotion_endTime = ?";
+            sql = "select promotion_endTime from promotion where goods_id = ?";
             pst =conn.prepareStatement(sql);
+            pst.setInt(1,goods_id);
             rs = pst.executeQuery();
-            if (rs.last())
+            while (rs.next())
             {
                 if (rs.getTimestamp(1).getTime() > beginTime.getTime())
                 {

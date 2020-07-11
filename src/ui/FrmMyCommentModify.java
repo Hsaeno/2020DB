@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FrmCommentModify extends JDialog implements ActionListener {
+public class FrmMyCommentModify extends JDialog implements ActionListener {
 
     private JPanel toolBar = new JPanel();
     private JPanel workPane = new JPanel();
@@ -25,7 +25,7 @@ public class FrmCommentModify extends JDialog implements ActionListener {
     private JComboBox edtStar = new JComboBox(starScore);
 
     BeanGoodsComment beanGoodsComment = null;
-    public FrmCommentModify (FrmPurchaseHistory f, String s, boolean b, BeanGoodsComment bgc)
+    public FrmMyCommentModify (FrmMyComment f, String s, boolean b, BeanGoodsComment bgc)
     {
         super(f,s,b);
         beanGoodsComment = bgc;

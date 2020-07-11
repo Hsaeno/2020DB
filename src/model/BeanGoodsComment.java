@@ -10,7 +10,14 @@ public class BeanGoodsComment {
     private Date comment_date;
     private int comment_star;
     private Blob comment_pic;
+    private String goods_name;
 
+    public String getGoods_name() {
+        return goods_name;
+    }
+    public void setGoods_name(String goods_name) {
+        this.goods_name = goods_name;
+    }
 
     public int getGoods_id() {
         return goods_id;
@@ -74,4 +81,17 @@ public class BeanGoodsComment {
             return "";
     }
 
+    public static final String[] tableTitles2 = {"商品名称","评论","星级"};
+
+    public String getCell2(int col)
+    {
+        if (col==0)
+            return this.getGoods_name();
+        else if(col==1)
+            return this.getComment_content();
+        else if(col==2)
+            return Integer.toString(this.getComment_star());
+        else
+            return "";
+    }
 }

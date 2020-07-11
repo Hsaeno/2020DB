@@ -12,7 +12,7 @@ public class BeanDisConnGoods {
     private String dis_content;
     private int tableId;
 
-    public static final String[] tableTitles={"序号","优惠序号","商品名称","开始时间","结束时间"};
+    public static final String[] tableTitles={"满折序号","满折内容","商品名称","开始时间","结束时间"};
 
     public int getTableId() {
         return tableId;
@@ -75,9 +75,9 @@ public class BeanDisConnGoods {
     {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (col==0)
-            return Integer.toString(this.getTableId());
-        else if (col==1)
             return Integer.toString(this.getDis_id());
+        else if (col==1)
+            return this.getDis_content();
         else if (col==2)
             return this.getGoods_name();
         else if (col==3)

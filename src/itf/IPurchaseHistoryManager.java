@@ -16,5 +16,6 @@ public interface IPurchaseHistoryManager {
     public void Back(int orders) throws BaseException;
     public void AdminUpdateOrder(int order_id) throws BaseException;
     public List<BeanOrder> AdminLoadAll() throws BaseException;
+    public List<BeanGoodsComment> loadAllByUser() throws BaseException;
 }
 

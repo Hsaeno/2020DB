@@ -418,4 +418,45 @@ public class PurchaseHistoryManager implements IPurchaseHistoryManager {
                 }
         }
     }
+
+    @Override
+    public List<BeanGoodsComment> loadAllByUser() throws BaseException {
+        Connection conn = null;
+        List<BeanGoodsComment> result = new ArrayList<BeanGoodsComment>();
+        try{
+            conn = DBUtil.getConnection();
+            String sql = "select goods_id,comment_content,comment_date,comment_star from goods_comment where user_id = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1,BeanUsers.currentLoginUser.getUser_id());
+            java.sql.ResultSet rs = pst.executeQuery();
+            while (rs.next())
+            {
+                BeanGoodsComment bgc = new BeanGoodsComment();
+                bgc.setGoods_id(rs.getInt(1));
+                bgc.setComment_content(rs.getString(2));
+                bgc.setComment_date(rs.getTimestamp(3));
+                bgc.setComment_star(rs.getInt(4));
+                String sql2 = "select goods_name from goods where goods_id = ?";
+                java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,bgc.getGoods_id());
+                java.sql.ResultSet rs2 = pst2.executeQuery();
+                rs2.next();
+                bgc.setGoods_name(rs2.getString(1));
+                result.add(bgc);
+            }
+            return result;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
 }

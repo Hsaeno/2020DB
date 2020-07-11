@@ -22,6 +22,7 @@ public class FrmPurchaseHistory extends JFrame implements ActionListener {
     private JMenuItem  menuItem_CommentAdd=new JMenuItem("评论添加");
     private JMenuItem  menuItem_CommentModify=new JMenuItem("评论修改");
     private JMenuItem  menuItem_CommentShow=new JMenuItem("评论查看");
+    private JMenuItem  menuItem_MyComment=new JMenuItem("我的评论");
     private JMenuItem  menuItem_MakeSure=new JMenuItem("确认收货");
     private JMenuItem  menuItem_Return=new JMenuItem("申请退货");
 
@@ -87,6 +88,7 @@ public class FrmPurchaseHistory extends JFrame implements ActionListener {
         this.menu_GoodsComment.add(this.menuItem_CommentAdd);
         this.menu_GoodsComment.add(this.menuItem_CommentModify);
         this.menu_GoodsComment.add(this.menuItem_CommentShow);
+        this.menu_GoodsComment.add(this.menuItem_MyComment);
 
         this.menu_Order.add(this.menuItem_MakeSure);
         this.menu_Order.add(this.menuItem_Return);
@@ -96,6 +98,7 @@ public class FrmPurchaseHistory extends JFrame implements ActionListener {
         this.menuItem_CommentShow.addActionListener(this);
         this.menuItem_MakeSure.addActionListener(this);
         this.menuItem_Return.addActionListener(this);
+        this.menuItem_MyComment.addActionListener(this);
 
         menubar.add(menu_GoodsComment);
         menubar.add(menu_Order);
@@ -189,6 +192,11 @@ public class FrmPurchaseHistory extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
                 return;
             }
+        }
+        if (e.getSource() == this.menuItem_MyComment)
+        {
+            FrmMyComment dlg = new FrmMyComment(this,"我的评论",true);
+            dlg.setVisible(true);
         }
     }
 }

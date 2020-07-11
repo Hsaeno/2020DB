@@ -38,7 +38,13 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
                 bdcg.setGoods_name(rs2.getString(1));
                 bdcg.setBegin_time(rs.getTimestamp(4));
                 bdcg.setEnd_time(rs.getTimestamp(5));
-                if (bdcg.getEnd_time().getTime()>System.currentTimeMillis())
+                sql2 = "select dis_inf_content from discount where dis_inf_id = ?";
+                pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,bdcg.getDis_id());
+                rs2 = pst2.executeQuery();
+                rs2.next();
+                bdcg.setDis_content(rs2.getString(1));
+                if (bdcg.getEnd_time().getTime()>System.currentTimeMillis() && bdcg.getBegin_time().getTime() < System.currentTimeMillis() )
                 {
                     result.add(bdcg);
                 }
@@ -84,6 +90,12 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
             if (!rs.next())
             {
                 throw new BusinessException("满折不存在");
+            }
+            Date dis_begin_time = rs.getTimestamp(5);
+            Date dis_end_Time = rs.getTimestamp(6);
+            if (beginTime.getTime() < dis_begin_time.getTime()  || endTime.getTime() > dis_end_Time.getTime())
+            {
+                throw new BusinessException("满折商品时间段应在满折信息时间段内");
             }
             sql = "insert into dis_conn_goods(dis_inf_id,goods_id,begin_time,end_time) values (?,?,?,?)";
             pst = conn.prepareStatement(sql);

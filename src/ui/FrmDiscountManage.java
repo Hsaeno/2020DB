@@ -77,7 +77,7 @@ public class FrmDiscountManage  extends JDialog implements ActionListener {
         this.btnCancel.addActionListener(this);
         this.btnDelete.addActionListener(this);
         this.btnModify.addActionListener(this);
-    }
+}
 
     @Override
     public void actionPerformed(ActionEvent e) {
