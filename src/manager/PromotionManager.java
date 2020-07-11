@@ -201,4 +201,48 @@ public class PromotionManager implements IPromotionManager {
                 }
         }
     }
+
+    @Override
+    public List<BeanPromotion> AdminLoadAll() throws BaseException {
+        Connection conn = null;
+        List<BeanPromotion> result=new ArrayList<BeanPromotion>();
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from promotion order by promotion_id";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = pst.executeQuery();
+            while(rs.next())
+            {
+                BeanPromotion bp = new BeanPromotion();
+                int goods_id = rs.getInt(2);
+                String sql2 ="select goods_name from goods where goods_id = ?";
+                java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,goods_id);
+                java.sql.ResultSet rs2 = pst2.executeQuery();
+                rs2.next();
+                String name = rs2.getString(1);
+                bp.setPromotion_id(rs.getInt(1));
+                bp.setGoods_id(rs.getInt(2));
+                bp.setGoods_name(name);
+                bp.setPromotion_price(rs.getDouble(3));
+                bp.setPromotion_number(rs.getInt(4));
+                bp.setPromotion_beginTime(rs.getTimestamp(5));
+                bp.setPromotion_endTime(rs.getTimestamp(6));
+                result.add(bp);
+            }
+            return result;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
 }

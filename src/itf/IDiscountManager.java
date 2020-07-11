@@ -12,4 +12,5 @@ public interface IDiscountManager {
     public void add(String content, int least_goodsNumber, double discount, Date beginTime, Date endTime) throws BaseException;
     public void delete(int id) throws BaseException;
     public void modify(int id,String content, int least_goodsNumber, double discount, Date beginTime, Date endTime) throws BaseException;
+    public List<BeanDiscount> AdminLoadAll() throws BaseException;
 }

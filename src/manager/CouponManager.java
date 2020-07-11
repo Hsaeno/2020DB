@@ -196,4 +196,41 @@ public class CouponManager implements ICouponManager {
                 }
         }
     }
+
+    @Override
+    public List<BeanCoupon> AdminLoadAll() throws BaseException {
+        Connection conn = null;
+        List<BeanCoupon> result=new ArrayList<BeanCoupon>();
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from coupon order by coupon_id";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = pst.executeQuery();
+            while(rs.next())
+            {
+                BeanCoupon bf = new BeanCoupon();
+                bf.setCoupon_id(rs.getInt(1));
+                bf.setCoupon_content(rs.getString(2));
+                bf.setLeast_money(rs.getDouble(3));
+                bf.setSub_money(rs.getDouble(4));
+                bf.setCp_beginTime(rs.getTimestamp(5));
+                bf.setCp_endTime(rs.getTimestamp(6));
+                result.add(bf);
+
+            }
+            return result;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
 }

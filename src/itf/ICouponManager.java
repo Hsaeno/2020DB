@@ -12,4 +12,5 @@ public interface ICouponManager {
     public void delete(int id) throws BaseException;
     public void modify(int id,String content, double least_money, double sub_money, Date beginTime,Date endTime) throws BaseException;
     public BeanCoupon loadByPrice(int price) throws BaseException;
+    public List<BeanCoupon> AdminLoadAll() throws BaseException;
 }

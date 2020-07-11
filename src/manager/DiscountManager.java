@@ -34,7 +34,7 @@ public class DiscountManager implements IDiscountManager {
                 bd.setDiscount(rs.getDouble(4));
                 bd.setDis_beginTime(rs.getTimestamp(5));
                 bd.setDis_endTime(rs.getTimestamp(6));
-                if (bd.getDis_endTime().getTime()>System.currentTimeMillis())
+                if (bd.getDis_endTime().getTime()>System.currentTimeMillis() && bd.getDis_beginTime().getTime()<System.currentTimeMillis())
                 {
                     result.add(bd);
                 }
@@ -145,6 +145,42 @@ public class DiscountManager implements IDiscountManager {
             pst.setTimestamp(5,new java.sql.Timestamp(endTime.getTime()));
             pst.setInt(6,id);
             pst.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
+
+    @Override
+    public List<BeanDiscount> AdminLoadAll() throws BaseException {
+        Connection conn = null;
+        List<BeanDiscount> result=new ArrayList<BeanDiscount>();
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from discount order by dis_inf_id";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = pst.executeQuery();
+            while(rs.next())
+            {
+                BeanDiscount bd = new BeanDiscount();
+                bd.setDis_inf_id(rs.getInt(1));
+                bd.setDis_inf_content(rs.getString(2));
+                bd.setLeastGoods_number(rs.getInt(3));
+                bd.setDiscount(rs.getDouble(4));
+                bd.setDis_beginTime(rs.getTimestamp(5));
+                bd.setDis_endTime(rs.getTimestamp(6));
+                result.add(bd);
+            }
+            return result;
         }
         catch (SQLException e) {
             e.printStackTrace();

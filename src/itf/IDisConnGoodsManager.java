@@ -12,4 +12,5 @@ public interface IDisConnGoodsManager {
     public void add(int dis_inf_id,String goods_name, Date beginTime, Date endTime) throws BaseException;
     public void delete(int id) throws BaseException;
     public void modify(int id,int dis_id,String goods_name, Date beginTime, Date endTime) throws BaseException;
+    public List<BeanDisConnGoods> AdminLoadAll() throws BaseException;
 }

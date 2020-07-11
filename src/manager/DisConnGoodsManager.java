@@ -192,5 +192,51 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
                 }
         }
     }
+
+    @Override
+    public List<BeanDisConnGoods> AdminLoadAll() throws BaseException {
+        Connection conn = null;
+        List<BeanDisConnGoods> result=new ArrayList<BeanDisConnGoods>();
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from dis_conn_goods order by tableid";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = pst.executeQuery();
+            while(rs.next())
+            {
+                BeanDisConnGoods bdcg = new BeanDisConnGoods();
+                bdcg.setTableId(rs.getInt(1));
+                bdcg.setDis_id(rs.getInt(2));
+                String sql2 = "select goods_name from goods where goods_id = ?";
+                java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,rs.getInt(3));
+                java.sql.ResultSet rs2 = pst2.executeQuery();
+                rs2.next();
+                bdcg.setGoods_name(rs2.getString(1));
+                bdcg.setBegin_time(rs.getTimestamp(4));
+                bdcg.setEnd_time(rs.getTimestamp(5));
+                sql2 = "select dis_inf_content from discount where dis_inf_id = ?";
+                pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,bdcg.getDis_id());
+                rs2 = pst2.executeQuery();
+                rs2.next();
+                bdcg.setDis_content(rs2.getString(1));
+                result.add(bdcg);
+            }
+            return result;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
 }
 
