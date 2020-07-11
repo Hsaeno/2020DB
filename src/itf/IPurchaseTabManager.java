@@ -14,4 +14,5 @@ public interface IPurchaseTabManager {
     public void add(String admin_id,String goods_name,String purchase_number,int purchase_orderid) throws BaseException;
     public List<BeanPurchaseTable> loadSimpleTable(BeanAdmin ba) throws BaseException;
     public void updateStatus(int orderId, String status) throws BaseException;
+
 }

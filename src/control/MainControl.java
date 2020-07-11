@@ -19,4 +19,5 @@ public class MainControl {
     public static MenuRecManager menuRecManager = new MenuRecManager();
     public static AddressManager addressManager = new AddressManager();
     public static CartManager cartManager = new CartManager();
+    public static PurchaseHistoryManager purchaseHistoryManager = new PurchaseHistoryManager();
 }

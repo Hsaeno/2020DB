@@ -85,7 +85,7 @@ public class FrmAddressManage extends JDialog implements ActionListener {
             this.setVisible(false);
         else if (e.getSource() == this.btnAdd)
         {
-            FrmAddressAdd dlg = new FrmAddressAdd(this,"优惠券添加",true);
+            FrmAddressAdd dlg = new FrmAddressAdd(this,"地址添加",true);
             dlg.setVisible(true);
             this.reloadTable();
         }

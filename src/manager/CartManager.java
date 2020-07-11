@@ -76,22 +76,12 @@ public class CartManager implements ICartManager {
             double goods_price =bg.getGoods_price();
             double goods_vip_price = bg.getVip_price();
             double goods_promotion_price = bg.getPromotionPrice();
-            String sql = "select goods_number from goods where goods_name = ?";
-            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1,goods_name);
-            java.sql.ResultSet rs = pst.executeQuery();
-            rs.next();
-            int remain = rs.getInt(1);
-            if (goods_number>remain)
-            {
-                throw new BusinessException("该商品库存不足,当前库存为"+remain);
-            }
             //防止多次选择造成库存异常
-            sql = "select * from tempcart where user_id = ? and goods_name = ?";
-            pst = conn.prepareStatement(sql);
+            String sql = "select * from tempcart where user_id = ? and goods_name = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1,user_id);
             pst.setString(2,goods_name);
-            rs = pst.executeQuery();
+            java.sql.ResultSet rs = pst.executeQuery();
             if (rs.next())
             {
                 throw new BusinessException("该商品已在购物车中,直接修改数量即可");
@@ -187,16 +177,6 @@ public class CartManager implements ICartManager {
             pst.setInt(1,id);
             java.sql.ResultSet rs = pst.executeQuery();
             rs.next();
-            String sql2 = "select goods_number from goods where goods_name = ?";
-            java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
-            pst2.setString(1,rs.getString(1));
-            java.sql.ResultSet rs2 = pst2.executeQuery();
-            rs2.next();
-            int remain = rs2.getInt(1);
-            if (goods_number>remain)
-            {
-                throw new BusinessException("该商品库存不足,当前库存为"+remain);
-            }
             sql = "update tempcart set goods_number = ?,goods_discount=? where cartNumber = ?";
             pst = conn.prepareStatement(sql);
             pst.setInt(1,goods_number);
@@ -315,6 +295,7 @@ public class CartManager implements ICartManager {
     public int MakeOrder(int address_id, int coupon_id, double origin_price, double settle_price, Date requireTime) throws BaseException {
         Connection conn = null;
         try{
+            System.out.println(address_id);
             conn = DBUtil.getConnection();
             Calendar c = Calendar.getInstance();
             Date d = new Date(System.currentTimeMillis());
@@ -323,6 +304,27 @@ public class CartManager implements ICartManager {
             java.util.Date date = c.getTime();
             if (requireTime.getTime()<date.getTime())
                 throw new BusinessException("要求时间不得早于3小时后");
+            String sqlPre = "select goods_name,goods_number from tempcart where user_id=?";
+            java.sql.PreparedStatement pstPre = conn.prepareStatement(sqlPre);
+            pstPre.setString(1,BeanUsers.currentLoginUser.getUser_id());
+            java.sql.ResultSet rsPre = pstPre.executeQuery();
+            while (rsPre.next())
+            {
+                String goods_name;
+                int need_number;
+                goods_name = rsPre.getString(1);
+                need_number = rsPre.getInt(2);
+                String sqlPre2 = "select goods_number from goods where goods_name = ?";
+                java.sql.PreparedStatement pstPre2 = conn.prepareStatement(sqlPre2);
+                pstPre2.setString(1,goods_name);
+                java.sql.ResultSet rs2 = pstPre2.executeQuery();
+                rs2.next();
+                int remain = rs2.getInt(1);
+                if (need_number>remain)
+                {
+                    throw new BusinessException(goods_name+"库存不足,"+"当前库存为"+remain);
+                }
+            }
             if (coupon_id != -1)
                 {
                     String sql = "insert into orders(address_id,user_id,coupon_id,origin_price,settle_price,order_status,require_time) values(?,?,?,?,?,'下单',?)";
@@ -376,7 +378,6 @@ public class CartManager implements ICartManager {
             for(int i = 0;i<lstCart.size();i++)
             {
                 String sql;
-                System.out.println(lstCart.get(i).getDis_inf_id() );
                 if (lstCart.get(i).getDis_inf_id() != 0)
                 {
                     sql = "insert into order_detail(order_id,goods_id,dis_inf_id,goods_number,price,discount) values(?,?,?,?,?,?)";
@@ -388,6 +389,11 @@ public class CartManager implements ICartManager {
                     pst.setDouble(5,lstCart.get(i).getGoods_price());
                     pst.setDouble(6,lstCart.get(i).getDiscount());
                     pst.executeUpdate();
+                    String sql2 = "update goods set goods_number = goods_number-? where goods_id = ?";
+                    java.sql.PreparedStatement pst2 =conn.prepareStatement(sql2);
+                    pst2.setInt(1,lstCart.get(i).getGoods_number());
+                    pst2.setInt(2,lstCart.get(i).getGoods_id());
+                    pst2.executeUpdate();
                 }
                 else {
                     sql = "insert into order_detail(order_id,goods_id,dis_inf_id,goods_number,price,discount) values(?,?,null,?,?,?)";
@@ -398,8 +404,12 @@ public class CartManager implements ICartManager {
                     pst.setDouble(4,lstCart.get(i).getGoods_price());
                     pst.setDouble(5,lstCart.get(i).getDiscount());
                     pst.executeUpdate();
+                    String sql2 = "update goods set goods_number = goods_number-? where goods_id = ?";
+                    java.sql.PreparedStatement pst2 =conn.prepareStatement(sql2);
+                    pst2.setInt(1,lstCart.get(i).getGoods_number());
+                    pst2.setInt(2,lstCart.get(i).getGoods_id());
+                    pst2.executeUpdate();
                 }
-
             }
         }
         catch (SQLException e) {

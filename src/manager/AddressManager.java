@@ -3,6 +3,7 @@ package manager;
 import itf.IAddressManager;
 import model.BeanAddress;
 import model.BeanDiscount;
+import model.BeanGoods;
 import model.BeanUsers;
 import util.BaseException;
 import util.BusinessException;
@@ -21,8 +22,9 @@ public class AddressManager implements IAddressManager {
         List<BeanAddress> result=new ArrayList<BeanAddress>();
         try {
             conn = DBUtil.getConnection();
-            String sql = "select * from address order by address_id ";
+            String sql = "select * from address where user_id = ? order by address_id ";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, BeanUsers.currentLoginUser.getUser_id());
             java.sql.ResultSet rs = pst.executeQuery();
             while(rs.next())
             {

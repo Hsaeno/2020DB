@@ -145,6 +145,8 @@ public class FrmOrder extends JDialog implements ActionListener {
             }
             try {
                 int order_id;
+                if (edtAddress.getSelectedIndex() ==-1)
+                    JOptionPane.showMessageDialog(null, "请先添加地址","错误",JOptionPane.ERROR_MESSAGE);
                 if (edtCoupon.getSelectedIndex()==0)
                 {
                     order_id = MainControl.cartManager.MakeOrder(beanAddresses.get(edtAddress.getSelectedIndex()).getAddress_id(),-1,orgPrice, Double.parseDouble(edtSettlePrice.getText()),requireDate);
