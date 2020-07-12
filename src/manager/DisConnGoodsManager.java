@@ -97,6 +97,17 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
             {
                 throw new BusinessException("满折商品时间段应在满折信息时间段内");
             }
+            sql = "select end_time,begin_time from dis_conn_goods where goods_id = ?";
+            pst =conn.prepareStatement(sql);
+            pst.setInt(1,goods_id);
+            rs = pst.executeQuery();
+            while (rs.next())
+            {
+                if (rs.getTimestamp(1).getTime() > beginTime.getTime() || rs.getTimestamp(2).getTime() < endTime.getTime())
+                {
+                    throw new BusinessException("同一件商品在相同时间内不得进行两次满折活动");
+                }
+            }
             sql = "insert into dis_conn_goods(dis_inf_id,goods_id,begin_time,end_time) values (?,?,?,?)";
             pst = conn.prepareStatement(sql);
             pst.setInt(1,dis_inf_id);
@@ -169,6 +180,17 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
             if (!rs.next())
             {
                 throw new BusinessException("满折不存在");
+            }
+            sql = "select end_time,begin_time from dis_conn_goods where goods_id = ?";
+            pst =conn.prepareStatement(sql);
+            pst.setInt(1,goods_id);
+            rs = pst.executeQuery();
+            while (rs.next())
+            {
+                if (rs.getTimestamp(1).getTime() > beginTime.getTime() || rs.getTimestamp(2).getTime() < endTime.getTime())
+                {
+                    throw new BusinessException("同一件商品在相同时间内不得进行两次满折活动");
+                }
             }
             sql = "update dis_conn_goods set dis_inf_id = ?,goods_id = ?, begin_time = ?,end_time = ? where tableid = ?";
             pst = conn.prepareStatement(sql);

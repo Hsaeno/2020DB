@@ -56,8 +56,16 @@ public class FrmCartGoodsModify extends JDialog implements ActionListener {
             this.setVisible(false);
         else if(e.getSource()==this.btnOk)
         {
+            int goods_number;
+            try{
+                goods_number = Integer.parseInt(edtNumber.getText());
+            }
+            catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, "商品数量格式错误", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             try {
-                MainControl.cartManager.modify(beanCart.getCartNumber(),Integer.parseInt(edtNumber.getText()));
+                MainControl.cartManager.modify(beanCart.getCartNumber(),goods_number);
                 JOptionPane.showMessageDialog(null,  "修改成功","提示",JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);
             } catch (BaseException e1) {

@@ -292,7 +292,7 @@ public class CartManager implements ICartManager {
     }
 
     @Override
-    public int MakeOrder(int address_id, int coupon_id, double origin_price, double settle_price, Date requireTime) throws BaseException {
+    public int MakeOrder(BeanAddress ba, int coupon_id, double origin_price, double settle_price, Date requireTime) throws BaseException {
         Connection conn = null;
         try{
             conn = DBUtil.getConnection();
@@ -317,7 +317,9 @@ public class CartManager implements ICartManager {
                 java.sql.PreparedStatement pstPre2 = conn.prepareStatement(sqlPre2);
                 pstPre2.setString(1,goods_name);
                 java.sql.ResultSet rs2 = pstPre2.executeQuery();
-                rs2.next();
+                if(!rs2.next()){
+                    throw new BusinessException(goods_name+"已被下架");
+                }
                 int remain = rs2.getInt(1);
                 if (need_number>remain)
                 {
@@ -326,24 +328,26 @@ public class CartManager implements ICartManager {
             }
             if (coupon_id != -1)
                 {
-                    String sql = "insert into orders(address_id,user_id,coupon_id,origin_price,settle_price,order_status,require_time) values(?,?,?,?,?,'下单',?)";
+                    String sql = "insert into orders(address_id,user_id,coupon_id,origin_price,settle_price,order_status,require_time,address_content) values(?,?,?,?,?,'下单',?,?)";
                     java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                    pst.setInt(1,address_id);
+                    pst.setInt(1,ba.getAddress_id());
                     pst.setString(2,BeanUsers.currentLoginUser.getUser_id());
                     pst.setInt(3,coupon_id);
                     pst.setDouble(4,origin_price);
                     pst.setDouble(5,settle_price);
                     pst.setTimestamp(6,new java.sql.Timestamp(requireTime.getTime()));
+                    pst.setString(7,ba.getProvince()+'-'+ba.getCity()+'-'+'-'+ba.getRegion()+'-'+ba.getDetail_address()+'-'+ba.getContact_person()+'-'+ba.getContact_phoneNumber());
                     pst.executeUpdate();
                 }
             else{
-                String sql = "insert into orders(address_id,user_id,coupon_id,origin_price,settle_price,order_status,require_time) values(?,?,null,?,?,'下单',?)";
+                String sql = "insert into orders(address_id,user_id,coupon_id,origin_price,settle_price,order_status,require_time,address_content) values(?,?,null,?,?,'下单',?,?)";
                 java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                pst.setInt(1,address_id);
+                pst.setInt(1,ba.getAddress_id());
                 pst.setString(2,BeanUsers.currentLoginUser.getUser_id());
                 pst.setDouble(3,origin_price);
                 pst.setDouble(4,settle_price);
                 pst.setTimestamp(5,new java.sql.Timestamp(requireTime.getTime()));
+                pst.setString(6,ba.getProvince()+'-'+ba.getCity()+'-'+'-'+ba.getRegion()+'-'+ba.getDetail_address()+'-'+ba.getContact_person()+'-'+ba.getContact_phoneNumber());
                 pst.executeUpdate();
             }
             String sql = "select max(order_id) from orders where user_id = ?";

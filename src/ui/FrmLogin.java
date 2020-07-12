@@ -78,7 +78,6 @@ public class FrmLogin extends JDialog implements ActionListener {
                 BeanUsers.currentLoginUser = MainControl.userManager.login(userid, pwd);
                 if (pwd.equals(BeanUsers.currentLoginUser.getUser_pwd())) {
                     flag = 1;
-                    setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(null, "密码错误", "错误提示", JOptionPane.ERROR_MESSAGE);
                 }
@@ -86,6 +85,7 @@ public class FrmLogin extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            setVisible(false);
         } else if (e.getSource() == this.btnCancel) {
             System.exit(0);
         } else if (e.getSource() == this.btnAdminLogin) {
@@ -95,7 +95,6 @@ public class FrmLogin extends JDialog implements ActionListener {
                 BeanAdmin.currentLoginAdmin = MainControl.adminManager.login(admin_id, pwd);
                 if (pwd.equals(BeanAdmin.currentLoginAdmin.getAdmin_loginPwd())) {
                     flag = 0;
-                    setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(null, "密码错误", "错误提示", JOptionPane.ERROR_MESSAGE);
                 }
@@ -103,11 +102,11 @@ public class FrmLogin extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(null, e1.getMessage(), "错误", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            setVisible(false);
         } else if (e.getSource() == this.btnRegister) {
             FrmRegister dlg = new FrmRegister(this, "注册", true);
             dlg.setVisible(true);
 
         }
-
     }
 }

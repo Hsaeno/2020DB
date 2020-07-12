@@ -132,10 +132,10 @@ public class GoodsManager implements IGoodsManager {
             bg.setCategory_id(rs.getInt(2));
             bg.setGoods_name(rs.getString(3));
             bg.setGoods_price(rs.getDouble(4));
-            bg.setSpec(rs.getDouble(5));
-            bg.setVip_price(rs.getDouble(6));
-            bg.setDetail(rs.getString(7));
-            bg.setGoods_number(rs.getInt(8));
+            bg.setVip_price(rs.getDouble(5));
+            bg.setGoods_number(rs.getInt(6));
+            bg.setSpec(rs.getDouble(7));
+            bg.setDetail(rs.getString(8));
             return bg;
         }
         catch (SQLException e) {
@@ -170,6 +170,10 @@ public class GoodsManager implements IGoodsManager {
         if (goods_number<0)
         {
             throw new BusinessException("请输入正确的数量");
+        }
+        if (vip_price > price)
+        {
+            throw new BusinessException("会员价不得高于正常价格");
         }
         try{
             conn = DBUtil.getConnection();

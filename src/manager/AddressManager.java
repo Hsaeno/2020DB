@@ -146,6 +146,10 @@ public class AddressManager implements IAddressManager {
         {
             throw new BusinessException("相关信息不能为空");
         }
+        if (region.length() >10 || detail_address.length() > 20)
+        {
+            throw new BusinessException("地址信息过长,请精简");
+        }
         try {
             conn = DBUtil.getConnection();
             String sql = "update address set user_id = ?,province = ?,city = ?, region = ?,detail_address = ?,contact_person = ?,contact_person = ? where address_id = ?";

@@ -56,8 +56,16 @@ public class FrmCartGoodsAdd extends JDialog implements ActionListener {
             this.setVisible(false);
         else if(e.getSource()==this.btnOk)
         {
-            try {
-                MainControl.cartManager.add(beanGoods,Integer.parseInt(edtNumber.getText()),BeanUsers.currentLoginUser.getUser_id());
+            int goods_number;
+            try{
+                goods_number = Integer.parseInt(edtNumber.getText());
+            }
+            catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, "商品数量格式错误", "错误", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try{
+                MainControl.cartManager.add(beanGoods,goods_number,BeanUsers.currentLoginUser.getUser_id());
                 JOptionPane.showMessageDialog(null,  "添加成功","提示",JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);
             } catch (BaseException e1) {

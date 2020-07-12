@@ -60,6 +60,12 @@ public class FrmUserModifyInf extends JDialog implements ActionListener {
         workPane.add(edtPwd);
         this.getContentPane().add(workPane, BorderLayout.CENTER);
         this.setSize(250, 250);
+        double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        this.setLocation((int) (width - this.getWidth()) / 2,
+                (int) (height - this.getHeight()) / 2);
+
+        this.validate();
         this.btnCancel.addActionListener(this);
         this.btnOk.addActionListener(this);
     }

@@ -2,6 +2,7 @@ package model;
 
 import util.DBUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BeanOrder {
@@ -14,7 +15,7 @@ public class BeanOrder {
     private Date require_time;
     private String order_status;
 
-    public static final String[] tableTitles={"订单号","地址相关","优惠券信息","结算价","优惠价","订单状态"};
+    public static final String[] tableTitles={"订单号","地址相关","优惠券信息","结算价","优惠价","要求送达时间","订单状态"};
 
     public String getAddress_content() {
         return address_content;
@@ -109,6 +110,7 @@ public class BeanOrder {
     }
     public String getCell(int col)
     {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         if (col==0)
             return Integer.toString(this.getOrder_id());
         else if (col==1)
@@ -120,6 +122,8 @@ public class BeanOrder {
         else if (col==4)
             return Double.toString(this.getOrigin_price()-this.getSettle_price());
         else if (col==5)
+            return sdf.format(this.getRequire_time());
+        else if (col==6)
             return this.getOrder_status();
         else
             return "";

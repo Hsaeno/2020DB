@@ -39,8 +39,8 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenu menu_OrderManage = new JMenu("订单管理");
     private JMenu menu_couponShow = new JMenu("优惠信息");
     private JMenu menu_RecommendShow = new JMenu("商品推荐");
+    private JMenu menu_PurchaseHistoryManage = new JMenu("订单查看");
 
-    private JMenu menu_PurchaseHistoryManage = new JMenu("个人消费情况");
     private JMenuItem  menuItem_UserModifyInf=new JMenuItem("个人信息修改/查看");
     private JMenuItem  menuItem_UserModifyPwd=new JMenuItem("密码修改");
     private JMenuItem  menuItem_AdminModifyPwd=new JMenuItem("密码修改");
@@ -58,7 +58,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_MenuInfManage=new JMenuItem("菜谱信息");
     private JMenuItem  menuItem_MenuRecManage=new JMenuItem("菜谱推荐");
     private JMenuItem  menuItem_AddressManage=new JMenuItem("地址管理");
-    private JMenuItem  menuItem_PurchaseHistoryManage = new JMenuItem("个人消费查看");
+    private JMenuItem  menuItem_PurchaseHistoryManage = new JMenuItem("我的订单");
 
     private JMenuItem  menuItem_RecommendShowByMenu = new JMenuItem("菜谱相关推荐");   //根据菜谱选商品
     private JMenuItem  menuItem_RecommendShowByGoods = new JMenuItem("商品相关推荐");  //当前商品菜谱相关的

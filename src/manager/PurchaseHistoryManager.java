@@ -32,12 +32,13 @@ public class PurchaseHistoryManager implements IPurchaseHistoryManager {
             {
                 BeanOrder bo  = new BeanOrder();
                 bo.setOrder_id(rs.getInt(1));
+                bo.setRequire_time(rs.getTimestamp(7));
                 String sql2 = "select * from address where address_id = ?";
                 java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
                 pst2.setInt(1,rs.getInt(2));
                 java.sql.ResultSet rs2 = pst2.executeQuery();
                 rs2.next();
-                bo.setAddress_content(rs2.getString(3)+'-'+rs2.getString(4)+'-'+rs2.getString(5)+'-'+rs2.getString(6)+'-'+rs2.getString(7));
+                bo.setAddress_content(rs.getString(9));
                 if (rs.getInt(4) != 0)
                 {
                     sql2 = "select coupon_content from coupon where coupon_id = ?";
@@ -138,6 +139,13 @@ public class PurchaseHistoryManager implements IPurchaseHistoryManager {
             java.sql.ResultSet rs = pst.executeQuery();
             if (rs.next())
                 throw new BusinessException("您已经为该商品增加过评论.您现在可以查看或修改该商品的评论");
+            sql = "select * from orders a,order_detail b where a.order_id = b.order_id and (order_status = '退货' or order_status = '送达') and goods_id = ? and user_id = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setInt(1,goods_id);
+            pst.setString(2,BeanUsers.currentLoginUser.getUser_id());
+            rs = pst.executeQuery();
+            if (!rs.next())
+                throw new BusinessException("您尚未完成此商品交易");
             sql = "insert into goods_comment(goods_id,user_id,comment_content,comment_date,comment_star) values (?,?,?,?,?)";
             pst = conn.prepareStatement(sql);
             pst.setInt(1,goods_id);
@@ -236,6 +244,14 @@ public class PurchaseHistoryManager implements IPurchaseHistoryManager {
         Connection conn = null;
         try {
             conn = DBUtil.getConnection();
+
+            String sql2 = "select * from orders a,order_detail b where a.order_id = b.order_id and (order_status = '退货' or order_status = '送达') and goods_id = ? and user_id = ?";
+            java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+            pst2.setInt(1,goods_id);
+            pst2.setString(2,BeanUsers.currentLoginUser.getUser_id());
+            java.sql.ResultSet rs2 = pst2.executeQuery();
+            if (!rs2.next())
+                throw new BusinessException("您尚未完成此商品交易");
             String sql = "update  goods_comment set comment_content = ?,comment_date = ?,comment_star = ? where goods_id=? and user_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1,comment);

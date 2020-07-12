@@ -1,9 +1,6 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Dialog;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -43,6 +40,12 @@ public class FrmAdminRegister extends JDialog implements ActionListener {
         workPane.add(edtPwd2);
         this.getContentPane().add(workPane, BorderLayout.CENTER);
         this.setSize(300, 180);
+        double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        this.setLocation((int) (width - this.getWidth()) / 2,
+                (int) (height - this.getHeight()) / 2);
+
+        this.validate();
         this.btnCancel.addActionListener(this);
         this.btnOk.addActionListener(this);
     }

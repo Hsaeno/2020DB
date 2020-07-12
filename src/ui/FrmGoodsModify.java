@@ -50,7 +50,7 @@ public class FrmGoodsModify extends JDialog implements ActionListener{
         edtName.setText(name);
         edtCatagory.setText(Integer.toString(goods.getCategory_id()));
         edtPrice.setText(Double.toString(goods.getGoods_price()));
-        edtVipPrice.setText(Double.toString(goods.getGoods_price()));
+        edtVipPrice.setText(Double.toString(goods.getVip_price()));
         edtNumber.setText(Integer.toString(goods.getGoods_number()));
         edtSpec.setText(Double.toString(goods.getSpec()));
         edtDetail.setText(goods.getDetail());
@@ -75,13 +75,13 @@ public class FrmGoodsModify extends JDialog implements ActionListener{
         workPane.add(labelDetail);
         workPane.add(edtDetail);
         this.getContentPane().add(workPane, BorderLayout.CENTER);
+        this.validate();
+        this.setSize(200, 600);
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,
                 (int) (height - this.getHeight()) / 2);
-
         this.validate();
-        this.setSize(200, 600);
         this.btnCancel.addActionListener(this);
         this.btnOk.addActionListener(this);
     }

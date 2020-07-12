@@ -91,13 +91,13 @@ public class PromotionManager implements IPromotionManager {
             {
                 throw new BusinessException("促销数量不得大于商品库存");
             }
-            sql = "select promotion_endTime from promotion where goods_id = ?";
+            sql = "select promotion_endTime,promotion_beginTime from promotion where goods_id = ?";
             pst =conn.prepareStatement(sql);
             pst.setInt(1,goods_id);
             rs = pst.executeQuery();
             while (rs.next())
             {
-                if (rs.getTimestamp(1).getTime() > beginTime.getTime())
+                if (rs.getTimestamp(1).getTime() > beginTime.getTime()  || rs.getTimestamp(2).getTime() < endTime.getTime())
                 {
                     throw new BusinessException("同一件商品在相同时间内不得进行两次促销");
                 }
@@ -177,6 +177,17 @@ public class PromotionManager implements IPromotionManager {
             if (number > goods_number)
             {
                 throw new BusinessException("促销数量不得大于商品库存");
+            }
+            sql = "select promotion_endTime,promotion_beginTime from promotion where goods_id = ?";
+            pst =conn.prepareStatement(sql);
+            pst.setInt(1,goods_id);
+            rs = pst.executeQuery();
+            while (rs.next())
+            {
+                if (rs.getTimestamp(1).getTime() > beginTime.getTime()  || rs.getTimestamp(2).getTime() < endTime.getTime())
+                {
+                    throw new BusinessException("同一件商品在相同时间内不得进行两次促销");
+                }
             }
             sql = "update promotion set goods_id = ?,promotion_price = ?, promotion_number = ?, promotion_beginTime = ?,promotion_endTime = ? where promotion_id = ?";
             pst = conn.prepareStatement(sql);

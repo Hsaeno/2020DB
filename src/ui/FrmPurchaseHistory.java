@@ -84,7 +84,10 @@ public class FrmPurchaseHistory extends JFrame implements ActionListener {
     public FrmPurchaseHistory(Frame f, String s, boolean b)
     {
         this.setTitle("消费信息");
-        this.getContentPane().add(new JScrollPane(this.dataTableOrder), BorderLayout.WEST);
+
+        JScrollPane jsp = new JScrollPane(this.dataTableOrder);
+        jsp.setPreferredSize(new Dimension(800,10));
+        this.getContentPane().add(jsp, BorderLayout.WEST);
         this.menu_GoodsComment.add(this.menuItem_CommentAdd);
         this.menu_GoodsComment.add(this.menuItem_CommentModify);
         this.menu_GoodsComment.add(this.menuItem_CommentShow);

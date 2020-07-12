@@ -178,7 +178,7 @@ public class BeanGoods {
         else if (col==8)
             return Integer.toString(this.getGoods_sellNumber());
         else if (col==9)
-            return String.format("%.2f",this.getStar());
+            return String.format("%.1f",this.getStar());
         else
             return "";
     }
@@ -207,7 +207,7 @@ public class BeanGoods {
         else if (col==8)
             return Integer.toString(this.getGoods_sellNumber());
         else if (col==9)
-            return String.format("%.2f",this.getStar());
+            return String.format("%.1f",this.getStar());
         else
             return "";
     }
@@ -237,7 +237,7 @@ public class BeanGoods {
         else if (col==9)
             return Integer.toString(this.getGoods_sellNumber());
         else if (col==10)
-            return String.format("%.2f",this.getStar());
+            return String.format("%.1f",this.getStar());
         else
             return "";
     }
