@@ -295,7 +295,6 @@ public class CartManager implements ICartManager {
     public int MakeOrder(int address_id, int coupon_id, double origin_price, double settle_price, Date requireTime) throws BaseException {
         Connection conn = null;
         try{
-            System.out.println(address_id);
             conn = DBUtil.getConnection();
             Calendar c = Calendar.getInstance();
             Date d = new Date(System.currentTimeMillis());

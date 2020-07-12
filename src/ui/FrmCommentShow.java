@@ -27,6 +27,7 @@ public class FrmCommentShow extends JDialog implements ActionListener {
 
     List<BeanGoodsComment> allComment = null;
 
+
     private void reloadTable(int goods_id){
         try {
             allComment = MainControl.purchaseHistoryManager.loadAll(goods_id);
@@ -62,7 +63,43 @@ public class FrmCommentShow extends JDialog implements ActionListener {
         this.validate();
         this.btnCancel.addActionListener(this);
     }
+    public FrmCommentShow(Frame f, String s, boolean b, int goods_id)
+    {
+        super(f,s,b);
+        toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        toolBar.add(btnCancel);
+        this.getContentPane().add(toolBar, BorderLayout.NORTH);
 
+
+        this.getContentPane().add(new JScrollPane(this.dataTableComment), BorderLayout.CENTER);
+        this.reloadTable(goods_id);
+        this.setSize(800, 600);
+        double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        this.setLocation((int) (width - this.getWidth()) / 2,
+                (int) (height - this.getHeight()) / 2);
+        this.validate();
+        this.btnCancel.addActionListener(this);
+    }
+
+    public FrmCommentShow(FrmGoodsSearch f, String s, boolean b, int goods_id)
+    {
+        super(f,s,b);
+        toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        toolBar.add(btnCancel);
+        this.getContentPane().add(toolBar, BorderLayout.NORTH);
+
+
+        this.getContentPane().add(new JScrollPane(this.dataTableComment), BorderLayout.CENTER);
+        this.reloadTable(goods_id);
+        this.setSize(800, 600);
+        double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        this.setLocation((int) (width - this.getWidth()) / 2,
+                (int) (height - this.getHeight()) / 2);
+        this.validate();
+        this.btnCancel.addActionListener(this);
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==this.btnCancel)

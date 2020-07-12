@@ -34,7 +34,7 @@ public class FrmMyCommentModify extends JDialog implements ActionListener {
         toolBar.add(btnCancel);
         this.getContentPane().add(toolBar, BorderLayout.SOUTH);
         edtContent.setText(bgc.getComment_content());
-        edtStar.setSelectedItem(bgc.getComment_star());
+        edtStar.setSelectedItem(Integer.toString(bgc.getComment_star()));
         workPane.add(labelContent);
         workPane.add(edtContent);
         workPane.add(labelStar);

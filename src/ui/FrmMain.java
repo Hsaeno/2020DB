@@ -22,6 +22,10 @@ public class FrmMain extends JFrame implements ActionListener{
     private JButton btnModify = new JButton("修改");
     private JButton btnDelete = new JButton("删除");
     private JButton btnCancel = new JButton("清空");
+    private JButton btnSearch = new JButton("查询");
+    private JButton btnLookComment = new JButton("查看评论");
+
+    private JTextField edtSearch  = new JTextField(15);
 
     private JMenuBar menubar=new JMenuBar(); ;
     private JMenu menu_PersonalManage=new JMenu("个人信息管理");
@@ -34,6 +38,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenu menu_MenuManage = new JMenu("菜谱相关");
     private JMenu menu_OrderManage = new JMenu("订单管理");
     private JMenu menu_couponShow = new JMenu("优惠信息");
+    private JMenu menu_RecommendShow = new JMenu("商品推荐");
 
     private JMenu menu_PurchaseHistoryManage = new JMenu("个人消费情况");
     private JMenuItem  menuItem_UserModifyInf=new JMenuItem("个人信息修改/查看");
@@ -54,6 +59,11 @@ public class FrmMain extends JFrame implements ActionListener{
     private JMenuItem  menuItem_MenuRecManage=new JMenuItem("菜谱推荐");
     private JMenuItem  menuItem_AddressManage=new JMenuItem("地址管理");
     private JMenuItem  menuItem_PurchaseHistoryManage = new JMenuItem("个人消费查看");
+
+    private JMenuItem  menuItem_RecommendShowByMenu = new JMenuItem("菜谱相关推荐");   //根据菜谱选商品
+    private JMenuItem  menuItem_RecommendShowByGoods = new JMenuItem("商品相关推荐");  //当前商品菜谱相关的
+    private JMenuItem  menuItem_RecommendShowByPerson = new JMenuItem("个人相关推荐"); //历史订单按购买次数最多排序推荐
+
 
     private JMenuItem  menuItem_CouponShow =new JMenuItem("优惠券信息");
     private JMenuItem  menuItem_DiscountShow =new JMenuItem("满折信息");
@@ -171,10 +181,17 @@ public class FrmMain extends JFrame implements ActionListener{
             this.menuItem_CouponShow.addActionListener(this);
             this.menuItem_DiscountShow.addActionListener(this);
             this.menuItem_PromotionShow.addActionListener(this);
+            this.menu_RecommendShow.add(this.menuItem_RecommendShowByMenu);
+            this.menu_RecommendShow.add(this.menuItem_RecommendShowByGoods);
+            this.menu_RecommendShow.add(this.menuItem_RecommendShowByPerson);
+            this.menuItem_RecommendShowByMenu.addActionListener(this);
+            this.menuItem_RecommendShowByGoods.addActionListener(this);
+            this.menuItem_RecommendShowByPerson.addActionListener(this);
             menubar.add(menu_PersonalManage);
             menubar.add(menu_VipManage);
             menubar.add(menu_PurchaseHistoryManage);
             menubar.add(menu_couponShow);
+            menubar.add(menu_RecommendShow);
             this.setJMenuBar(menubar);
             this.dataTableFresh.addMouseListener(new MouseAdapter(){
                 public void mouseClicked(MouseEvent e)
@@ -202,11 +219,14 @@ public class FrmMain extends JFrame implements ActionListener{
                 statusBar.add(label);
             }
             toolBar.setLayout(new FlowLayout(FlowLayout.CENTER));
+            toolBar.add(btnLookComment);
             toolBar.add(btnAdd);
             toolBar.add(btnModify);
             toolBar.add(btnDelete);
             toolBar.add(btnMakeOrder);
             toolBar.add(btnCancel);
+            toolBar.add(edtSearch);
+            toolBar.add(btnSearch);
             this.getContentPane().add(toolBar,BorderLayout.NORTH);
             this.getContentPane().add(statusBar,BorderLayout.SOUTH);
             this.getContentPane().add(new JScrollPane(this.dataTableCart), BorderLayout.EAST);
@@ -222,6 +242,8 @@ public class FrmMain extends JFrame implements ActionListener{
             this.btnDelete.addActionListener(this);
             this.btnModify.addActionListener(this);
             this.btnMakeOrder.addActionListener(this);
+            this.btnSearch.addActionListener(this);
+            this.btnLookComment.addActionListener(this);
         }
         else if(FrmLogin.flag == 0)
         {
@@ -419,6 +441,12 @@ public class FrmMain extends JFrame implements ActionListener{
         {
             List<BeanCoupon> allCoupon = null;
             List<BeanAddress> allAddress = null;
+            int i = FrmMain.this.dataTableFresh.getSelectedRow();
+            if (i < 0)
+            {
+                JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             try {
                 allCoupon = MainControl.couponManager.loadAll();
                 allAddress = MainControl.addressManager.loadUserAddress(BeanUsers.currentLoginUser);
@@ -437,6 +465,7 @@ public class FrmMain extends JFrame implements ActionListener{
             }
             dlg.setVisible(true);
             this.reloadCartTable();
+            this.reloadGoodsTable(i);
         }
         else if (e.getSource() == this.menuItem_PurchaseHistoryManage)
         {
@@ -461,6 +490,45 @@ public class FrmMain extends JFrame implements ActionListener{
         else if (e.getSource() == this.menuItem_DiscountShow)
         {
             FrmDiscountShow dlg = new FrmDiscountShow(this,"满折信息",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.btnSearch)
+        {
+            FrmGoodsSearch dlg = new FrmGoodsSearch(this,"商品查询",true,edtSearch.getText());
+            dlg.setVisible(true);
+            this.reloadCartTable();
+        }
+        else if (e.getSource() == this.menuItem_RecommendShowByMenu)
+        {
+            FrmMenuShow dlg = new FrmMenuShow(this,"菜谱查看",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_RecommendShowByPerson)
+        {
+            FrmRecByPerson dlg = new FrmRecByPerson(this,"商品推荐",true);
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.menuItem_RecommendShowByGoods)
+        {
+            int i = FrmMain.this.dataTableGoods.getSelectedRow();
+            if (i < 0)
+            {
+                JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            FrmRecByGoods dlg = new FrmRecByGoods(this,"商品推荐",true,freshGoods.get(i).getGoods_id());
+            dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.btnLookComment)
+        {
+            int i = FrmMain.this.dataTableGoods.getSelectedRow();
+            if (i < 0)
+            {
+                JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            FrmCommentShow dlg = null;
+            dlg = new FrmCommentShow(this,"修改商品评论",true,freshGoods.get(i).getGoods_id());
             dlg.setVisible(true);
         }
 }}

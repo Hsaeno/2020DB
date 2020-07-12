@@ -43,7 +43,6 @@ public class FrmGoodsModify extends JDialog implements ActionListener{
     {
         super(f,s,b);
         int id = goods.getCategory_id();
-        System.out.println(goods);
         name = goods.getGoods_name();
         String des = goods.getDetail();
         edtId.setText(Integer.toString(id));
