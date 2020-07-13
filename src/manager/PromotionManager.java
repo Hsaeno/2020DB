@@ -99,7 +99,7 @@ public class PromotionManager implements IPromotionManager {
             rs = pst.executeQuery();
             while (rs.next())
             {
-                if (rs.getTimestamp(1).getTime() > beginTime.getTime()  || rs.getTimestamp(2).getTime() < endTime.getTime())
+                if (rs.getTimestamp(1).getTime() > beginTime.getTime()  && rs.getTimestamp(2).getTime() < endTime.getTime())
                 {
                     throw new BusinessException("同一件商品在相同时间内不得进行两次促销");
                 }
@@ -194,7 +194,7 @@ public class PromotionManager implements IPromotionManager {
             rs = pst.executeQuery();
             while (rs.next())
             {
-                if ((rs.getTimestamp(1).getTime() > beginTime.getTime()  || rs.getTimestamp(2).getTime() < endTime.getTime()) && rs.getInt(3) != id)
+                if ((rs.getTimestamp(1).getTime() > beginTime.getTime() && rs.getTimestamp(2).getTime() < endTime.getTime()) && rs.getInt(3) != id)
                 {
                     throw new BusinessException("同一件商品在相同时间内不得进行两次促销");
                 }

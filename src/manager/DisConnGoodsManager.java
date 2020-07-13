@@ -104,7 +104,7 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
             rs = pst.executeQuery();
             while (rs.next())
             {
-                if (rs.getTimestamp(1).getTime() > beginTime.getTime() || rs.getTimestamp(2).getTime() < endTime.getTime())
+                if (rs.getTimestamp(1).getTime() > beginTime.getTime() && rs.getTimestamp(2).getTime() < endTime.getTime())
                 {
                     throw new BusinessException("同一件商品在相同时间内不得进行两次满折活动");
                 }
@@ -196,7 +196,7 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
             rs = pst.executeQuery();
             while (rs.next())
             {
-                if (rs.getTimestamp(1).getTime() > beginTime.getTime() || rs.getTimestamp(2).getTime() < endTime.getTime())
+                if (rs.getTimestamp(1).getTime() > beginTime.getTime() && rs.getTimestamp(2).getTime() < endTime.getTime())
                 {
                     throw new BusinessException("同一件商品在相同时间内不得进行两次满折活动");
                 }
