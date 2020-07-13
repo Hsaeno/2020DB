@@ -143,12 +143,16 @@ public class CartManager implements ICartManager {
             pst.setDouble(5,goods_vip_price);
             pst.setDouble(6,goods_promotion_price);
             if (goods_number >= bg.getDiscount_least_number())
+            {
                 pst.setDouble(7,bg.getDiscount());
+                pst.setNull(10,Types.INTEGER);
+            }
             else
-                pst.setDouble(7,1.0);
+            { pst.setDouble(7,1.0);
+            pst.setInt(10,bg.getDiscountId());
+            }
             pst.setInt(8,bg.getDiscount_least_number());
             pst.setDouble(9,bg.getDiscount());
-            pst.setInt(10,bg.getDiscountId());
             pst.setInt(11,bg.getPromotionId());
             pst.executeUpdate();
         }
@@ -251,7 +255,7 @@ public class CartManager implements ICartManager {
             sql = "update tempcart set goods_number = ?,goods_discount=? where cartNumber = ?";
             pst = conn.prepareStatement(sql);
             pst.setInt(1,goods_number);
-            if (rs.getInt(2) < goods_number)
+            if (rs.getInt(2) <= goods_number)
                 pst.setDouble(2,rs.getDouble(3));
             else
                 pst.setDouble(2,1.0);
@@ -416,13 +420,15 @@ public class CartManager implements ICartManager {
                     String sqlUpdate = "update promotion set promotion_number = promotion_number - ? where promotion_id = ?";
                     java.sql.PreparedStatement pstUpdate = conn.prepareStatement(sqlUpdate);
                     pstUpdate.setInt(1,goods_number);
+                    pstUpdate.setInt(2,promotion_id);
                     pstUpdate.executeUpdate();
                 }
                 else
                 {
                     String sqlUpdate = "update promotion set promotion_number = promotion_number - ? where promotion_id = ?";
                     java.sql.PreparedStatement pstUpdate = conn.prepareStatement(sqlUpdate);
-                    pstUpdate.setInt(1,0);
+                    pstUpdate.setInt(1,rs3.getInt(1));
+                    pstUpdate.setInt(2,promotion_id);
                     pstUpdate.executeUpdate();
                 }
                 String sqlPre2 = "select goods_number from goods where goods_name = ?";
@@ -470,8 +476,8 @@ public class CartManager implements ICartManager {
             return rs.getInt(1);
         }
         catch (SQLException e) {
-            this.deleteAll(BeanUsers.currentLoginUser.getUser_id());
-            throw new BusinessException("商品信息已发生改变,请重新下单");
+            e.printStackTrace();
+            throw new DbException(e);
         } finally {
             if (conn != null)
                 try {

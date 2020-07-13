@@ -363,7 +363,7 @@ public class GoodsManager implements IGoodsManager {
                 bg.setPromotionPrice(bg.getGoods_price());
                 while (rs2.next())
                 {
-                    if (rs2.getInt(2) > 0 && rs2.getTimestamp(3).getTime() < System.currentTimeMillis() && rs2.getTimestamp(4).getTime() > System.currentTimeMillis())
+                    if (rs2.getInt(2) > 0 && rs2.getTimestamp(3).getTime() < System.currentTimeMillis() && rs2.getTimestamp(4).getTime() > System.currentTimeMillis() )
                     {
                         bg.setPromotionPrice(rs2.getDouble(1));
                         bg.setPromotionId(rs2.getInt(5));

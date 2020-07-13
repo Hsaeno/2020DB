@@ -108,8 +108,11 @@ public class BeanCart {
             return Double.toString(this.getGoods_price());
         else if (col==3)
             return Double.toString(this.getGoods_vip_price());
-        else if (col==4)
+        else if (col==4){
+            if (this.getGoods_promotion_price() == this.getGoods_price())
+                return "无";
             return Double.toString(this.getGoods_promotion_price());
+        }
         else if (col==5)
             return Double.toString(this.getDiscount());
         else

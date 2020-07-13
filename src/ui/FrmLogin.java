@@ -9,13 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.tools.Tool;
 
 import model.BeanUsers;
@@ -32,11 +26,12 @@ public class FrmLogin extends JDialog implements ActionListener {
     private JButton btnAdminLogin = new JButton("管理员登陆");
     private JButton btnCancel = new JButton("退出");
     private JButton btnRegister = new JButton("用户注册");
+    private JLabel DD  = new JLabel(new ImageIcon("DD.png"));
 
     private JLabel labelUser = new JLabel("账号:");
     private JLabel labelPwd = new JLabel("密码:");
-    private JTextField edtUserId = new JTextField(22);
-    private JPasswordField edtPwd = new JPasswordField(22);
+    private JTextField edtUserId = new JTextField(20);
+    private JPasswordField edtPwd = new JPasswordField(20);
 
     public FrmLogin(Frame f,String s,boolean b)
     {
@@ -47,12 +42,13 @@ public class FrmLogin extends JDialog implements ActionListener {
         toolBar.add(this.btnUserLogin);
         toolBar.add(this.btnCancel);
         this.getContentPane().add(toolBar,BorderLayout.SOUTH);
+        workPane.add(DD);
         workPane.add(labelUser);
         workPane.add(edtUserId);
         workPane.add(labelPwd);
         workPane.add(edtPwd);
         this.getContentPane().add(workPane,BorderLayout.CENTER);
-        this.setSize(320,140);
+        this.setSize(300,400);
         double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         this.setLocation((int) (width - this.getWidth()) / 2,
@@ -106,7 +102,6 @@ public class FrmLogin extends JDialog implements ActionListener {
         } else if (e.getSource() == this.btnRegister) {
             FrmRegister dlg = new FrmRegister(this, "注册", true);
             dlg.setVisible(true);
-
         }
     }
 }

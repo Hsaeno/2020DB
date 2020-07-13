@@ -97,8 +97,8 @@ public class BeanGoods {
     }
 
     public static final String[] tableTitles = {"序号","类别","名称","价格","会员价","数量","规格","详情","销量","星级"};
-    public static final String[] tableTitles2 = {"名称","价格","会员价","折扣价","满折情况","规格","详情","库存","销量","星级"};
-    public static final String[] tableTitles3 = {"类别","名称","价格","会员价","折扣价","满折情况","规格","详情","库存","销量","星级"};
+    public static final String[] tableTitles2 = {"名称","价格","会员价","促销价","满折情况","规格","详情","库存","销量","星级"};
+    public static final String[] tableTitles3 = {"类别","名称","价格","会员价","促销价","满折情况","规格","详情","库存","销量","星级"};
 
     public int getGoods_id() {
         return goods_id;

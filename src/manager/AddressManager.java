@@ -157,7 +157,7 @@ public class AddressManager implements IAddressManager {
         }
         try {
             conn = DBUtil.getConnection();
-            String sql = "update address set user_id = ?,province = ?,city = ?, region = ?,detail_address = ?,contact_person = ?,contact_person = ? where address_id = ?";
+            String sql = "update address set user_id = ?,province = ?,city = ?, region = ?,detail_address = ?,contact_person = ?,contact_phoneNumber = ? where address_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1,user_id);
             pst.setString(2,province);

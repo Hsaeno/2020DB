@@ -135,7 +135,7 @@ public class FrmAddressModify extends JDialog implements ActionListener {
             String detailAddress = edtDetailAddress.getText();
             String contactPer = edtContactPerson.getText();
             String contactPhone = edtContactPhone.getText();
-            try {
+                 try {
                 MainControl.addressManager.modify(id,userId,province,city,region,detailAddress,contactPer,contactPhone);
                 JOptionPane.showMessageDialog(null,  "添加成功","提示",JOptionPane.INFORMATION_MESSAGE);
                 this.setVisible(false);

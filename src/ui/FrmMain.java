@@ -23,6 +23,7 @@ public class FrmMain extends JFrame implements ActionListener{
     private JButton btnDelete = new JButton("删除");
     private JButton btnCancel = new JButton("清空");
     private JButton btnSearch = new JButton("查询");
+    private JButton btnRefresh= new JButton("刷新");
     private JButton btnLookComment = new JButton("查看评论");
 
     private JTextField edtSearch  = new JTextField(15);
@@ -157,7 +158,7 @@ public class FrmMain extends JFrame implements ActionListener{
     public FrmMain()
     {
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
-        this.setTitle("生鲜网超管理系统");
+        this.setTitle("生鲜网超");
         dlgLogin = new FrmLogin(this,"登录",true);
         dlgLogin.setVisible(true);
         if (FrmLogin.flag == 1 )
@@ -227,6 +228,7 @@ public class FrmMain extends JFrame implements ActionListener{
             toolBar.add(btnCancel);
             toolBar.add(edtSearch);
             toolBar.add(btnSearch);
+            toolBar.add(btnRefresh);
             this.getContentPane().add(toolBar,BorderLayout.NORTH);
             this.getContentPane().add(statusBar,BorderLayout.SOUTH);
             this.getContentPane().add(new JScrollPane(this.dataTableCart), BorderLayout.EAST);
@@ -244,6 +246,7 @@ public class FrmMain extends JFrame implements ActionListener{
             this.btnMakeOrder.addActionListener(this);
             this.btnSearch.addActionListener(this);
             this.btnLookComment.addActionListener(this);
+            this.btnRefresh.addActionListener(this);
         }
         else if(FrmLogin.flag == 0)
         {
@@ -354,7 +357,7 @@ public class FrmMain extends JFrame implements ActionListener{
         }
         else if (e.getSource() == this.menuItem_CouponManage)
         {
-            FrmCouponManage dlg = new FrmCouponManage(this,"优惠信息",true);
+            FrmCouponManage dlg = new FrmCouponManage(this,"优惠券",true);
             dlg.setVisible(true);
         }
         else if (e.getSource() == this.menuItem_PromotionManage)
@@ -521,7 +524,11 @@ public class FrmMain extends JFrame implements ActionListener{
                 return;
             }
             FrmCommentShow dlg = null;
-            dlg = new FrmCommentShow(this,"修改商品评论",true,freshGoods.get(i).getGoods_id());
+            dlg = new FrmCommentShow(this,"查看商品评论",true,freshGoods.get(i).getGoods_id());
             dlg.setVisible(true);
+        }
+        else if (e.getSource() == this.btnRefresh)
+        {
+            reloadCartTable();
         }
 }}

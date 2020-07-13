@@ -40,7 +40,7 @@ public class FrmDiscountModify extends JDialog implements ActionListener {
         String leastNumber = Integer.toString(bd.getLeastGoods_number());
         String discount = Double.toString(bd.getDiscount());
         String beginTime = sdf.format(bd.getDis_beginTime());
-        String endTime = sdf.format(bd.getDis_beginTime());
+        String endTime = sdf.format(bd.getDis_endTime());
         edtId.setText(id);
         edtId.setEditable(false);
         edtContent.setText(content);

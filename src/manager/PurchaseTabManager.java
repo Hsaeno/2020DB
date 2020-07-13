@@ -65,7 +65,7 @@ public class PurchaseTabManager implements IPurchaseTabManager {
                 java.sql.ResultSet rs2 = pst2.executeQuery();
                 rs2.next();
                 bpt.setGoods_name(rs2.getString(1));
-                bpt.setCatagory_id(rs.getInt(2));
+                bpt.setCatagory_id(rs2.getInt(2));
                 bpt.setPurchase_id(rs.getInt(1));
                 bpt.setAdmin_id(rs.getString(2));
                 bpt.setGoods_id(rs.getInt(3));

@@ -126,7 +126,7 @@ public class FrmAdminShowFresh extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.menuItem_FreshAdd)
         {
-            FrmFreshAdd dlg = new FrmFreshAdd(this,"商品信息",true);
+            FrmFreshAdd dlg = new FrmFreshAdd(this,"生鲜信息",true);
             dlg.setVisible(true);
             reloadFreshTable();
         }
@@ -154,7 +154,7 @@ public class FrmAdminShowFresh extends JFrame implements ActionListener {
                 return;
             }
             else {
-                FrmFreshModify dlg = new FrmFreshModify(this,"商品修改",true,this.curFresh);
+                FrmFreshModify dlg = new FrmFreshModify(this,"生鲜修改",true,this.curFresh);
                 dlg.setVisible(true);
                 reloadFreshTable();
             }

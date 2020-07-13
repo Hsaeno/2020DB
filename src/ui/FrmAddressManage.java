@@ -114,7 +114,7 @@ public class FrmAddressManage extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(null, "请选择地址", "错误",JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            FrmAddressModify dlg = new FrmAddressModify(this,"地址添加",true,allAddress.get(i));
+            FrmAddressModify dlg = new FrmAddressModify(this,"地址修改",true,allAddress.get(i));
             dlg.setVisible(true);
             this.reloadTable();
         }
