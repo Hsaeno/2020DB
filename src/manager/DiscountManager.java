@@ -1,5 +1,6 @@
 package manager;
 
+import control.MainControl;
 import itf.ICouponManager;
 import itf.IDiscountManager;
 import model.BeanCoupon;
@@ -76,6 +77,7 @@ public class DiscountManager implements IDiscountManager {
             pst.setTimestamp(4,new java.sql.Timestamp(beginTime.getTime()));
             pst.setTimestamp(5,new java.sql.Timestamp(endTime.getTime()));
             pst.executeUpdate();
+            MainControl.cartManager.resetCart();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -99,7 +101,14 @@ public class DiscountManager implements IDiscountManager {
             String sql = "delete from discount where dis_inf_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,id);
-            pst.executeUpdate();
+            try{
+                pst.executeUpdate();
+                MainControl.cartManager.resetCart();
+            }
+            catch (Exception e)
+            {
+                throw new BusinessException("该满折有绑定信息,无法删除");
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -145,6 +154,7 @@ public class DiscountManager implements IDiscountManager {
             pst.setTimestamp(5,new java.sql.Timestamp(endTime.getTime()));
             pst.setInt(6,id);
             pst.executeUpdate();
+            MainControl.cartManager.resetCart();
         }
         catch (SQLException e) {
             e.printStackTrace();

@@ -157,7 +157,7 @@ public class FreshManager implements IFreshManager{
             java.sql.ResultSet rs = pst.executeQuery();
             if (rs.next())
             {
-                throw new BusinessException("该类别中仍存在商品，无法删除！");
+                throw new BusinessException("该类别中仍存在商品,无法删除！");
             }
             sql = "delete from fresh where catagory_id = ?";
             pst = conn.prepareStatement(sql);

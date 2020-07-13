@@ -1,5 +1,6 @@
 package manager;
 
+import control.MainControl;
 import itf.IDisConnGoodsManager;
 import itf.IGoodsManager;
 import model.BeanDisConnGoods;
@@ -115,6 +116,7 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
             pst.setTimestamp(3,new java.sql.Timestamp(beginTime.getTime()));
             pst.setTimestamp(4,new java.sql.Timestamp(endTime.getTime()));
             pst.executeUpdate();
+            MainControl.cartManager.resetCart();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -139,7 +141,14 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
             String sql = "delete from dis_conn_goods where tableid = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,id);
-            pst.executeUpdate();
+            try{
+                pst.executeUpdate();
+                MainControl.cartManager.resetCart();
+            }
+            catch(Exception e)
+            {
+                throw new BusinessException("该满折商品存在绑定信息");
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -200,6 +209,7 @@ public class DisConnGoodsManager implements IDisConnGoodsManager {
             pst.setTimestamp(4,new java.sql.Timestamp(endTime.getTime()));
             pst.setInt(5,id);
             pst.executeUpdate();
+            MainControl.cartManager.resetCart();
         }
         catch (SQLException e) {
             e.printStackTrace();

@@ -36,6 +36,7 @@ public class CartManager implements ICartManager {
             {
                 BeanCart bc = new BeanCart();
                 bc.setCartNumber(rs.getInt(1));
+                bc.setUser_id(rs.getString(2));
                 bc.setGoodsName(rs.getString(3));
                 bc.setGoods_number(rs.getInt(4));
                 bc.setGoods_price(rs.getDouble(5));
@@ -67,6 +68,53 @@ public class CartManager implements ICartManager {
                 }
         }
     }
+
+    @Override
+    public List<BeanCart> loadAll() throws BaseException {
+        Connection conn = null;
+        List<BeanCart> result=new ArrayList<BeanCart>();
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from tempcart order by cartNumber ";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = pst.executeQuery();
+            while(rs.next())
+            {
+                BeanCart bc = new BeanCart();
+                bc.setCartNumber(rs.getInt(1));
+                bc.setUser_id(rs.getString(2));
+                bc.setGoodsName(rs.getString(3));
+                bc.setGoods_number(rs.getInt(4));
+                bc.setGoods_price(rs.getDouble(5));
+                bc.setGoods_vip_price(rs.getDouble(6));
+                bc.setGoods_promotion_price(rs.getDouble(7));
+                bc.setDiscount(rs.getDouble(8));
+                bc.setDis_inf_id(rs.getInt(11));
+                String sql2 = "select goods_id from goods where goods_name = ?";
+                java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+                pst2.setString(1,bc.getGoodsName());
+                java.sql.ResultSet rs2 = pst2.executeQuery();
+                rs2.next();
+                bc.setGoods_id(rs2.getInt(1));
+                result.add(bc);
+            }
+
+            return result;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
+
     @Override
     public void add(BeanGoods bg,int goods_number,String user_id) throws BaseException {
         Connection conn = null;
@@ -86,8 +134,7 @@ public class CartManager implements ICartManager {
             {
                 throw new BusinessException("该商品已在购物车中,直接修改数量即可");
             }
-
-            sql = "insert into tempcart(goods_name,goods_number,user_id,goods_price,goods_vip_price,goods_promotion_price,goods_discount,least_number,if_discount,dis_inf_id) values (?,?,?,?,?,?,?,?,?,?)";
+            sql = "insert into tempcart(goods_name,goods_number,user_id,goods_price,goods_vip_price,goods_promotion_price,goods_discount,least_number,if_discount,dis_inf_id,promotion_id) values (?,?,?,?,?,?,?,?,?,?,?)";
             pst = conn.prepareStatement(sql);
             pst.setString(1,goods_name);
             pst.setInt(2,goods_number);
@@ -102,6 +149,7 @@ public class CartManager implements ICartManager {
             pst.setInt(8,bg.getDiscount_least_number());
             pst.setDouble(9,bg.getDiscount());
             pst.setInt(10,bg.getDiscountId());
+            pst.setInt(11,bg.getPromotionId());
             pst.executeUpdate();
         }
         catch (SQLException e) {
@@ -150,6 +198,29 @@ public class CartManager implements ICartManager {
             String sql = "delete from tempcart where user_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1,user_id);
+            pst.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
+
+    @Override
+    public void deleteAll() throws BaseException {
+        Connection conn = null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "delete from tempcart";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.executeUpdate();
         }
         catch (SQLException e) {
@@ -253,7 +324,7 @@ public class CartManager implements ICartManager {
                     throw new BusinessException("您未达到该优惠券的最低金额");
                 }
             }
-            String sql = "select goods_number,goods_price,goods_vip_price,goods_promotion_price,goods_discount from tempcart where user_id = ?";
+            String sql = "select goods_number,goods_price,goods_vip_price,goods_promotion_price,goods_discount,promotion_id from tempcart where user_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1,BeanUsers.currentLoginUser.getUser_id());
             java.sql.ResultSet rs = pst.executeQuery();
@@ -264,8 +335,26 @@ public class CartManager implements ICartManager {
                 double goods_vip_price =rs.getDouble(3);
                 double goods_promotion_price = rs.getDouble(4);
                 double goods_discount = rs.getDouble(5);
-                if (goods_promotion_price <= goods_price)
-                    sum += goods_number * goods_promotion_price * goods_discount;
+                int promotion_id = rs.getInt(6);
+                int promotion_number = 0;
+                if (promotion_id != 0 )
+                {
+                    String sql2 = "select promotion_number from promotion where promotion_id=?";
+                    java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+                    pst2.setInt(1,promotion_id);
+                    java.sql.ResultSet rs2 = pst2.executeQuery();
+                    rs2.next();
+                    if (rs2.getInt(1) > goods_number)
+                        promotion_number = goods_number;
+                    else
+                        promotion_number = rs2.getInt(1);
+                }
+                if (goods_promotion_price < goods_price) {
+                    if (!vip)
+                    sum += promotion_number * goods_promotion_price * goods_discount + (goods_number - promotion_number)*goods_price*goods_discount;
+                    if (vip)
+                        sum += promotion_number * goods_promotion_price * goods_discount + (goods_number - promotion_number)*goods_vip_price * goods_discount;
+                }
                 else{
                     if (vip)
                         sum += goods_vip_price * goods_number * goods_discount;
@@ -303,16 +392,39 @@ public class CartManager implements ICartManager {
             java.util.Date date = c.getTime();
             if (requireTime.getTime()<date.getTime())
                 throw new BusinessException("要求时间不得早于3小时后");
-            String sqlPre = "select goods_name,goods_number from tempcart where user_id=?";
+            String sqlPre = "select goods_name,goods_number,goods_price,goods_vip_price,goods_promotion_price,dis_inf_id,least_number,if_discount,promotion_id from tempcart where user_id=?";
             java.sql.PreparedStatement pstPre = conn.prepareStatement(sqlPre);
             pstPre.setString(1,BeanUsers.currentLoginUser.getUser_id());
             java.sql.ResultSet rsPre = pstPre.executeQuery();
+
             while (rsPre.next())
             {
                 String goods_name;
                 int need_number;
                 goods_name = rsPre.getString(1);
                 need_number = rsPre.getInt(2);
+
+                int promotion_id = rsPre.getInt(9);
+                int goods_number = rsPre.getInt(2);
+                String sql2 = "select promotion_number from promotion where promotion_id=?";
+                java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,promotion_id);
+                java.sql.ResultSet rs3 = pst2.executeQuery();
+                rs3.next();
+                if (rs3.getInt(1) > goods_number)
+                {
+                    String sqlUpdate = "update promotion set promotion_number = promotion_number - ? where promotion_id = ?";
+                    java.sql.PreparedStatement pstUpdate = conn.prepareStatement(sqlUpdate);
+                    pstUpdate.setInt(1,goods_number);
+                    pstUpdate.executeUpdate();
+                }
+                else
+                {
+                    String sqlUpdate = "update promotion set promotion_number = promotion_number - ? where promotion_id = ?";
+                    java.sql.PreparedStatement pstUpdate = conn.prepareStatement(sqlUpdate);
+                    pstUpdate.setInt(1,0);
+                    pstUpdate.executeUpdate();
+                }
                 String sqlPre2 = "select goods_number from goods where goods_name = ?";
                 java.sql.PreparedStatement pstPre2 = conn.prepareStatement(sqlPre2);
                 pstPre2.setString(1,goods_name);
@@ -358,8 +470,8 @@ public class CartManager implements ICartManager {
             return rs.getInt(1);
         }
         catch (SQLException e) {
-            e.printStackTrace();
-            throw new DbException(e);
+            this.deleteAll(BeanUsers.currentLoginUser.getUser_id());
+            throw new BusinessException("商品信息已发生改变,请重新下单");
         } finally {
             if (conn != null)
                 try {
@@ -412,10 +524,47 @@ public class CartManager implements ICartManager {
                     pst2.setInt(1,lstCart.get(i).getGoods_number());
                     pst2.setInt(2,lstCart.get(i).getGoods_id());
                     pst2.executeUpdate();
+
+
                 }
             }
         }
         catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
+
+    @Override
+    public void resetCart() throws BaseException {
+        Connection conn = null;
+        List<BeanCart> allCart = null;
+        List<BeanGoods> allGoods = null;
+        try{
+            conn = DBUtil.getConnection();
+            allCart = loadAll();
+            deleteAll();
+            allGoods = MainControl.goodsManager.loadAll();
+            for (int i = 0;i<allCart.size();i++)
+            {
+                for (int j = 0;j<allGoods.size();j++)
+                {
+                    if (allCart.get(i).getGoodsName().equals(allGoods.get(j).getGoods_name()))
+                    {
+                        add(allGoods.get(j),allCart.get(i).getGoods_number(),allCart.get(i).getUser_id());
+                    }
+                }
+            }
+    }
+        catch (Exception e) {
             e.printStackTrace();
             throw new DbException(e);
         } finally {

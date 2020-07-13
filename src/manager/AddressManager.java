@@ -111,8 +111,13 @@ public class AddressManager implements IAddressManager {
             conn = DBUtil.getConnection();
             String sql = "delete from address where address_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setInt(1,id);
-            pst.executeUpdate();
+            pst.setInt(1, id);
+            try {
+                pst.executeUpdate();
+            } catch (Exception e)
+            {
+                throw new BusinessException("该地址有绑定信息,不支持删除");
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();

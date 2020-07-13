@@ -31,7 +31,7 @@ public class FrmOrder extends JDialog implements ActionListener {
     private JLabel labelCoupon = new JLabel("            优惠方案：                     ");
     private JLabel labelAddress = new JLabel("       收货地址：");
     private JLabel labelTime = new JLabel("     送达时间：");
-    private JLabel labelSettlePrice = new JLabel("                                     结算金额：");
+    private JLabel labelSettlePrice = new JLabel("                                 结算金额：");
 
     private JTextField edtOriPrice = new JTextField(15);
     private JComboBox edtCoupon = new JComboBox ();
@@ -82,6 +82,7 @@ public class FrmOrder extends JDialog implements ActionListener {
         edtOriPrice.setText(getDoubleString(MainControl.cartManager.CalculateOrgPrice()));
         orgPrice = MainControl.cartManager.CalculateOrgPrice();
         edtSettlePrice.setText(getDoubleString(MainControl.cartManager.CalculateSetPrice(-1,orgPrice)));
+        edtOriPrice.setEditable(false);
         workPane.add(edtOriPrice);
         workPane.add(labelCoupon);
         workPane.add(edtCoupon);

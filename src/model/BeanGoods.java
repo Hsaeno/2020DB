@@ -40,6 +40,15 @@ public class BeanGoods {
     private double spec;
     private String detail;
     private double promotionPrice;
+    private int promotionId;
+
+    public int getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(int promotionId) {
+        this.promotionId = promotionId;
+    }
 
     private String discountContent;
     private int discountId;

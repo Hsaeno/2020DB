@@ -1,8 +1,10 @@
 package manager;
 
+import control.MainControl;
 import itf.IPromotionManager;
 import model.BeanCoupon;
 import model.BeanPromotion;
+import org.hibernate.boot.spi.InFlightMetadataCollector;
 import util.BaseException;
 import util.BusinessException;
 import util.DBUtil;
@@ -110,6 +112,7 @@ public class PromotionManager implements IPromotionManager {
             pst.setTimestamp(4,new java.sql.Timestamp(beginTime.getTime()));
             pst.setTimestamp(5,new java.sql.Timestamp(endTime.getTime()));
             pst.executeUpdate();
+            MainControl.cartManager.resetCart();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -133,7 +136,14 @@ public class PromotionManager implements IPromotionManager {
             String sql = "delete from promotion where promotion_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,id);
-            pst.executeUpdate();
+            try{
+                pst.executeUpdate();
+                MainControl.cartManager.resetCart();
+            }
+            catch (Exception e)
+            {
+                throw new BusinessException("该促销有绑定信息,不支持更改");
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -178,13 +188,13 @@ public class PromotionManager implements IPromotionManager {
             {
                 throw new BusinessException("促销数量不得大于商品库存");
             }
-            sql = "select promotion_endTime,promotion_beginTime from promotion where goods_id = ?";
+            sql = "select promotion_endTime,promotion_beginTime,promotion_id from promotion where goods_id = ?";
             pst =conn.prepareStatement(sql);
             pst.setInt(1,goods_id);
             rs = pst.executeQuery();
             while (rs.next())
             {
-                if (rs.getTimestamp(1).getTime() > beginTime.getTime()  || rs.getTimestamp(2).getTime() < endTime.getTime())
+                if ((rs.getTimestamp(1).getTime() > beginTime.getTime()  || rs.getTimestamp(2).getTime() < endTime.getTime()) && rs.getInt(3) != id)
                 {
                     throw new BusinessException("同一件商品在相同时间内不得进行两次促销");
                 }
@@ -198,6 +208,7 @@ public class PromotionManager implements IPromotionManager {
             pst.setTimestamp(5,new java.sql.Timestamp(endTime.getTime()));
             pst.setInt(6,id);
             pst.executeUpdate();
+            MainControl.cartManager.resetCart();
         }
         catch (SQLException e) {
             e.printStackTrace();

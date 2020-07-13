@@ -400,7 +400,7 @@ public class PurchaseHistoryManager implements IPurchaseHistoryManager {
                 pst2.setInt(1,rs.getInt(2));
                 java.sql.ResultSet rs2 = pst2.executeQuery();
                 rs2.next();
-                bo.setAddress_content(rs2.getString(3)+'-'+rs2.getString(4)+'-'+rs2.getString(5)+'-'+rs2.getString(6)+'-'+rs2.getString(7));
+                bo.setAddress_content(rs.getString(9));
                 if (rs.getInt(4) != 0)
                 {
                     sql2 = "select coupon_content from coupon where coupon_id = ?";
@@ -417,6 +417,7 @@ public class PurchaseHistoryManager implements IPurchaseHistoryManager {
                 bo.setOrigin_price(rs.getDouble(5));
                 bo.setSettle_price(rs.getDouble(6));
                 bo.setOrder_status(rs.getString(8));
+                bo.setRequire_time(rs.getTimestamp(7));
                 result.add(bo);
             }
             return result;

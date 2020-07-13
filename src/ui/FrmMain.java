@@ -441,12 +441,6 @@ public class FrmMain extends JFrame implements ActionListener{
         {
             List<BeanCoupon> allCoupon = null;
             List<BeanAddress> allAddress = null;
-            int i = FrmMain.this.dataTableFresh.getSelectedRow();
-            if (i < 0)
-            {
-                JOptionPane.showMessageDialog(null, "请选择商品", "错误",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
             try {
                 allCoupon = MainControl.couponManager.loadAll();
                 allAddress = MainControl.addressManager.loadUserAddress(BeanUsers.currentLoginUser);
@@ -465,7 +459,6 @@ public class FrmMain extends JFrame implements ActionListener{
             }
             dlg.setVisible(true);
             this.reloadCartTable();
-            this.reloadGoodsTable(i);
         }
         else if (e.getSource() == this.menuItem_PurchaseHistoryManage)
         {

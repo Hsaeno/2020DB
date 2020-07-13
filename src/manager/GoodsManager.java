@@ -79,6 +79,99 @@ public class GoodsManager implements IGoodsManager {
     }
 
     @Override
+    public List<BeanGoods> loadAll() throws BaseException {
+        Connection conn = null;
+        List<BeanGoods> result=new ArrayList<BeanGoods>();
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from goods  where goods_number > 0 order by goods_id ";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = pst.executeQuery();
+            while(rs.next())
+            {
+                BeanGoods bg = new BeanGoods();
+                bg.setGoods_id(rs.getInt(1));
+                bg.setCategory_id(rs.getInt(2));
+                bg.setGoods_name(rs.getString(3));
+                bg.setGoods_price(rs.getDouble(4));
+                bg.setVip_price(rs.getDouble(5));
+                bg.setGoods_number(rs.getInt(6));
+                bg.setSpec(rs.getDouble(7));
+                bg.setDetail(rs.getString(8));
+                String sql2 = "select promotion_price,promotion_number,promotion_beginTime,promotion_endTime,promotion_id from promotion where goods_id = ? ";
+                java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,rs.getInt(1));
+                java.sql.ResultSet rs2 = pst2.executeQuery();
+                bg.setPromotionPrice(bg.getGoods_price());
+                while (rs2.next())
+                {
+                    if (rs2.getInt(2) > 0 && rs2.getTimestamp(3).getTime() < System.currentTimeMillis() && rs2.getTimestamp(4).getTime() > System.currentTimeMillis())
+                    {
+                        bg.setPromotionPrice(rs2.getDouble(1));
+                        bg.setPromotionId(rs2.getInt(5));
+                        break;
+                    }
+                }
+                sql2 = "select a.dis_inf_id,a.dis_inf_content,a.dis_beginTime,a.dis_endTime,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
+                pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,rs.getInt(1));
+                rs2 = pst2.executeQuery();
+                bg.setDiscount(1.0);
+                bg.setDiscountContent("无");
+                bg.setDiscount_least_number(1);
+                while (rs2.next())
+                {
+                    if (rs2.getTimestamp(3).getTime()<System.currentTimeMillis() && rs2.getTimestamp(4).getTime() > System.currentTimeMillis())
+                    {
+                        bg.setDiscountId(rs2.getInt(1));
+                        bg.setDiscountContent(rs2.getString(2));
+                        bg.setDiscount_least_number(rs2.getInt(5));
+                        bg.setDiscount(rs2.getDouble(6));
+                        break;
+                    }
+                }
+
+                sql2 = "select sum(goods_number) from order_detail where goods_id=?";
+                pst2 = conn.prepareStatement(sql2);
+                pst2.setInt(1,bg.getGoods_id());
+                rs2 = pst2.executeQuery();
+                rs2.next();
+                bg.setGoods_sellNumber(rs2.getInt(1));
+
+
+                double SumStar = 5;
+                String sqlStar = "select sum(comment_star) from goods_comment where goods_id = ?";
+                java.sql.PreparedStatement pstStar = conn.prepareStatement(sqlStar);
+                pstStar.setInt(1,bg.getGoods_id());
+                java.sql.ResultSet rsStar = pstStar.executeQuery();
+                rsStar.next();
+                SumStar += rsStar.getInt(1);
+                sqlStar = "select count(*) from goods_comment where goods_id = ?";
+                pstStar = conn.prepareStatement(sqlStar);
+                pstStar.setInt(1,bg.getGoods_id());
+                rsStar = pstStar.executeQuery();
+                rsStar.next();
+                bg.setStar(SumStar / (rsStar.getInt(1)+1));
+
+                result.add(bg);
+            }
+            return result;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+        }
+    }
+
+    @Override
     public BeanGoods add(int catagory_id,String name,double price,double vip_price,int goods_number,double Spec,String detail) throws BaseException {
 
         Connection conn = null;
@@ -220,7 +313,13 @@ public class GoodsManager implements IGoodsManager {
             String sql = "delete from goods where goods_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,goods_id);
-            pst.executeUpdate();
+            try{
+                pst.executeUpdate();
+            }
+            catch (Exception e)
+            {
+                throw new BusinessException("该商品有绑定信息,无法删除");
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -257,7 +356,7 @@ public class GoodsManager implements IGoodsManager {
                 bg.setGoods_number(rs.getInt(6));
                 bg.setSpec(rs.getDouble(7));
                 bg.setDetail(rs.getString(8));
-                String sql2 = "select promotion_price,promotion_number,promotion_beginTime,promotion_endTime from promotion where goods_id = ? ";
+                String sql2 = "select promotion_price,promotion_number,promotion_beginTime,promotion_endTime,promotion_id from promotion where goods_id = ? ";
                 java.sql.PreparedStatement pst2 = conn.prepareStatement(sql2);
                 pst2.setInt(1,rs.getInt(1));
                 java.sql.ResultSet rs2 = pst2.executeQuery();
@@ -267,6 +366,7 @@ public class GoodsManager implements IGoodsManager {
                     if (rs2.getInt(2) > 0 && rs2.getTimestamp(3).getTime() < System.currentTimeMillis() && rs2.getTimestamp(4).getTime() > System.currentTimeMillis())
                     {
                         bg.setPromotionPrice(rs2.getDouble(1));
+                        bg.setPromotionId(rs2.getInt(5));
                         break;
                     }
                 }

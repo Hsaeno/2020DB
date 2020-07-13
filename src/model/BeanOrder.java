@@ -122,10 +122,16 @@ public class BeanOrder {
         else if (col==4)
             return Double.toString(this.getOrigin_price()-this.getSettle_price());
         else if (col==5)
+        {
+            if (this.require_time == null)
+                return "无";
             return sdf.format(this.getRequire_time());
+        }
+
         else if (col==6)
             return this.getOrder_status();
         else
             return "";
     }
+
 }

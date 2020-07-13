@@ -99,7 +99,13 @@ public class CouponManager implements ICouponManager {
             String sql = "delete from coupon where coupon_id = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1,id);
-            pst.executeUpdate();
+            try{
+                pst.executeUpdate();
+            }
+            catch (Exception e)
+            {
+                throw new BusinessException("该优惠券有绑定信息,不支持删除");
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();

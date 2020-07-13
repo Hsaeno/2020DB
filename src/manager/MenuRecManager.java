@@ -103,7 +103,13 @@ public class MenuRecManager implements IMenuRecManager {
             String sql = "delete from menu_recommand where tabid = ?";
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
-            pst.executeUpdate();
+            try{
+                pst.executeUpdate();
+            }
+            catch (Exception e)
+            {
+                throw new BusinessException("该推荐菜谱有绑定信息,无法删除");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DbException(e);
