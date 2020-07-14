@@ -112,7 +112,7 @@ public class GoodsManager implements IGoodsManager {
                         break;
                     }
                 }
-                sql2 = "select a.dis_inf_id,a.dis_inf_content,a.dis_beginTime,a.dis_endTime,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
+                sql2 = "select a.dis_inf_id,a.dis_inf_content,b.begin_time,b.end_time,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
                 pst2 = conn.prepareStatement(sql2);
                 pst2.setInt(1,rs.getInt(1));
                 rs2 = pst2.executeQuery();
@@ -370,13 +370,14 @@ public class GoodsManager implements IGoodsManager {
                         break;
                     }
                 }
-                sql2 = "select a.dis_inf_id,a.dis_inf_content,a.dis_beginTime,a.dis_endTime,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
+                sql2 = "select a.dis_inf_id,a.dis_inf_content,b.begin_time,b.end_time,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
                 pst2 = conn.prepareStatement(sql2);
                 pst2.setInt(1,rs.getInt(1));
                 rs2 = pst2.executeQuery();
                 bg.setDiscount(1.0);
                 bg.setDiscountContent("无");
                 bg.setDiscount_least_number(1);
+
                 while (rs2.next())
                 {
                     if (rs2.getTimestamp(3).getTime()<System.currentTimeMillis() && rs2.getTimestamp(4).getTime() > System.currentTimeMillis())
@@ -478,7 +479,7 @@ public class GoodsManager implements IGoodsManager {
                 rs2.next();
                 bg.setGoods_sellNumber(rs2.getInt(1));
 
-                sql2 = "select a.dis_inf_id,a.dis_inf_content,a.dis_beginTime,a.dis_endTime,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
+                sql2 = "select a.dis_inf_id,a.dis_inf_content,b.begin_Time,b.end_Time,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
                 pst2 = conn.prepareStatement(sql2);
                 pst2.setInt(1,rs.getInt(1));
                 rs2 = pst2.executeQuery();
@@ -586,7 +587,7 @@ public class GoodsManager implements IGoodsManager {
                     rs2.next();
                     bg.setGoods_sellNumber(rs2.getInt(1));
 
-                    sql2 = "select a.dis_inf_id,a.dis_inf_content,a.dis_beginTime,a.dis_endTime,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
+                    sql2 = "select a.dis_inf_id,a.dis_inf_content,b.begin_time,b.end_time,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
                     pst2 = conn.prepareStatement(sql2);
                     pst2.setInt(1,rs.getInt(1));
                     rs2 = pst2.executeQuery();
@@ -696,7 +697,7 @@ public class GoodsManager implements IGoodsManager {
                     rs2.next();
                     bg.setGoods_sellNumber(rs2.getInt(1));
 
-                    sql2 = "select a.dis_inf_id,a.dis_inf_content,a.dis_beginTime,a.dis_endTime,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
+                    sql2 = "select a.dis_inf_id,a.dis_inf_content,b.begin_time,b.end_time,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
                     pst2 = conn.prepareStatement(sql2);
                     pst2.setInt(1,rs.getInt(1));
                     rs2 = pst2.executeQuery();
@@ -824,7 +825,7 @@ public class GoodsManager implements IGoodsManager {
                     rs2.next();
                     bg.setGoods_sellNumber(rs2.getInt(1));
 
-                    sql2 = "select a.dis_inf_id,a.dis_inf_content,a.dis_beginTime,a.dis_endTime,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
+                    sql2 = "select a.dis_inf_id,a.dis_inf_content,b.begin_time,b.end_time,leastgoods_number,discount from discount a,dis_conn_goods b where a.dis_inf_id = b.dis_inf_id and b.goods_id = ?  ";
                     pst2 = conn.prepareStatement(sql2);
                     pst2.setInt(1,rs.getInt(1));
                     rs2 = pst2.executeQuery();

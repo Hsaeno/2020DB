@@ -48,6 +48,8 @@ public class FrmDiscountModify extends JDialog implements ActionListener {
         edtDiscount.setText(discount);
         edtBeginTime.setText(beginTime);
         edtEndTime.setText(endTime);
+        edtBeginTime.setEditable(false);
+        edtEndTime.setEditable(false);
         toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
         toolBar.add(this.btnOk);
         toolBar.add(btnCancel);
